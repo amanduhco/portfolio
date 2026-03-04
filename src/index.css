@@ -323,39 +323,42 @@ body { overscroll-behavior: none; }
 }
 
 /* ════════════════════════════════════════
-   POTTERY WHEEL — base opacity
+   POTTERY WHEEL — base transform context
    ════════════════════════════════════════ */
-#pot-body path, #wavy-band path, #wheel-base path { opacity: 0.6; }
+#pot-body path, #wavy-band path, #wheel-base path {
+  transform-box: fill-box;
+  transform-origin: center;
+}
 
 /* ════════════════════════════════════════
-   POTTERY WHEEL — keyframes
+   POTTERY WHEEL — keyframes (movement)
    ════════════════════════════════════════ */
 
-/* Pot body: 0.6 rest → 1.0 peak → 0.3 shadow → 0.6 */
+/* Pot body: horizontal ±2.5 px wave */
 @keyframes wavePeak {
-  0%   { opacity: 0.6; }
-  15%  { opacity: 1.0; }
-  40%  { opacity: 0.3; }
-  70%  { opacity: 0.6; }
-  100% { opacity: 0.6; }
+  0%   { transform: translateX(0);      }
+  25%  { transform: translateX(2.5px);  }
+  50%  { transform: translateX(0);      }
+  75%  { transform: translateX(-2.5px); }
+  100% { transform: translateX(0);      }
 }
 
-/* Wavy band: higher contrast + subtle scaleY bulge */
+/* Wavy band: wider X swing + vertical pulse */
 @keyframes wavePeakWavy {
-  0%   { opacity: 0.6; transform: scaleY(1);    }
-  15%  { opacity: 1.0; transform: scaleY(1.08); }
-  40%  { opacity: 0.15; transform: scaleY(0.95); }
-  70%  { opacity: 0.6; transform: scaleY(1);    }
-  100% { opacity: 0.6; transform: scaleY(1);    }
+  0%   { transform: translateX(0)     scaleY(1);    }
+  25%  { transform: translateX(4px)   scaleY(1.1);  }
+  50%  { transform: translateX(0)     scaleY(1);    }
+  75%  { transform: translateX(-4px)  scaleY(0.92); }
+  100% { transform: translateX(0)     scaleY(1);    }
 }
 
-/* Wheel base: slower, wider opacity swing */
+/* Wheel base: circular orbit — X + Y movement */
 @keyframes wavePeakWheel {
-  0%   { opacity: 0.5; }
-  15%  { opacity: 1.0; }
-  40%  { opacity: 0.4; }
-  70%  { opacity: 0.5; }
-  100% { opacity: 0.5; }
+  0%   { transform: translate(0,      0);     }
+  25%  { transform: translate(2.5px,  -1px);  }
+  50%  { transform: translate(0,      -2px);  }
+  75%  { transform: translate(-2.5px, -1px);  }
+  100% { transform: translate(0,      0);     }
 }
 
 /* ════════════════════════════════════════

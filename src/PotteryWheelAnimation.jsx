@@ -37,7 +37,7 @@ function groupRules(sel, groups, anim, dur, delays) {
 }
 
 function buildSpinCSS(spinning, dir) {
-  if (!spinning) return '#pot-body path,#wavy-band path,#wheel-base path{animation:none;opacity:0.6;transition:opacity 0.6s ease}'
+  if (!spinning) return '#pot-body path,#wavy-band path,#wheel-base path{animation:none;transform:none;transition:transform 0.4s ease}'
   const d = dir === 'cw' ? CW_DELAYS : CCW_DELAYS
   return (
     groupRules('#pot-body',   POT_BODY_GROUPS,   'wavePeak',      1.8, d) +
