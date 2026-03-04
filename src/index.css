@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root {
+  --color-text: #333333;
+  --color-muted: #999999;
+  --color-bg: #F2F2F2;
+  --color-border: #DDDDDD;
+  --font-base: 'Futura', 'Century Gothic', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-base);
+  -webkit-font-smoothing: antialiased;
+}
