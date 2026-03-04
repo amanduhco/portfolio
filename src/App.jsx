@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import BrowserGuy from './BrowserGuy'
 
 export default function App() {
   const [active, setActive] = useState('hello')
@@ -52,20 +53,12 @@ export default function App() {
       >
         {/* Logo + Name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <svg width="38" height="28" viewBox="0 0 38 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0.5" y="0.5" width="37" height="27" rx="3.5" stroke="#333333" strokeWidth="1"/>
-            <circle cx="10" cy="14" r="2.5" stroke="#333333" strokeWidth="1"/>
-            <circle cx="19" cy="14" r="2.5" stroke="#333333" strokeWidth="1"/>
-            <circle cx="28" cy="14" r="2.5" stroke="#333333" strokeWidth="1"/>
-            <circle cx="10" cy="14" r="0.75" fill="#333333"/>
-            <circle cx="19" cy="14" r="0.75" fill="#333333"/>
-            <circle cx="28" cy="14" r="0.75" fill="#333333"/>
-          </svg>
+          <BrowserGuy />
           <span style={{ fontSize: '14px', letterSpacing: '0.01em' }}>amanda piñero</span>
         </div>
 
         {/* Nav */}
-        <nav style={{ marginTop: 'auto', paddingBottom: '40px' }}>
+        <nav style={{ marginTop: '166px' }}>
           {navItems.map((item) => (
             <button
               key={item}

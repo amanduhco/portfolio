@@ -21,3 +21,22 @@ html, body, #root {
   font-family: var(--font-base);
   -webkit-font-smoothing: antialiased;
 }
+
+/* BrowserGuy ZZZ animation */
+.zzz {
+  opacity: 0;
+}
+
+@keyframes zzzFloat {
+  0%   { opacity: 0;   transform: translateY(0px); }
+  20%  { opacity: 1;   transform: translateY(-1px); }
+  75%  { opacity: 0.8; transform: translateY(-3px); }
+  100% { opacity: 0;   transform: translateY(-4px); }
+}
+
+.zzz-active {
+  animation: zzzFloat 2s ease-in-out infinite;
+}
+.zzz-delay-0 { animation-delay: 0s; }
+.zzz-delay-1 { animation-delay: 0.35s; }
+.zzz-delay-2 { animation-delay: 0.7s; }
