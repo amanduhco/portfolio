@@ -178,6 +178,7 @@ body { overscroll-behavior: none; }
 
   .panel-top {
     margin-bottom: 10px;
+    justify-content: center;
   }
 
   .panel-name {
