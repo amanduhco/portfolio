@@ -2,47 +2,47 @@ import { useState } from 'react'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
-// Column group (A–F) per path, ordered as they appear in the SVG
-const POT_BODY_GROUPS = [
-  'B','E','B','C','C','D','D','E','E',
-  'B','C','C','D','D','E','E',
-  'B','B','B','E','E','E',
-  'B','F',
-  'A','B','F',
+// X coordinate of every animated path, in SVG order
+const POT_BODY_X = [
+  104.6,141.05,104.6,110.67,116.75,122.82,128.9,134.97,141.05,104.6,
+  110.67,116.75,122.82,128.9,134.97,141.05,86.37,92.45,98.52,147.12,
+  153.2,159.27,80.3,165.35,74.23,80.3,171.42,
 ]
-const WAVY_BAND_GROUPS = [
-  'A','B','B','D','D','E','F','F',
-  'A','A','B','B','C','E','E','F','F',
-  'A','B','C','E','E','F',
+const WAVY_BAND_X = [
+  68.15,87.05,93.12,123.5,129.57,159.94,166.02,177.5,68.15,74.9,
+  80.97,99.19,117.42,135.64,153.87,172.09,177.5,68.15,105.27,111.35,
+  141.72,147.79,177.5,
 ]
-const WHEEL_BASE_GROUPS = [
-  'A','A','A','A','A','A','A','A','F','F','F','F','F','F','F',
-  'A','A','A','A','B','F','F','F','F','F','A','B','B','B','E',
-  'E','E','F','A','B','C','C','D','D','E','E','F','A','A','A',
-  'A','F','F','F','A','A','A','A','A','F','F','F','F','F','A',
-  'A','A','A','B','E','E','F','F','F','B','B','B','B','C','D',
-  'D','E','E','E',
+const WHEEL_BASE_X = [
+  30.93,37.01,43.08,49.16,55.24,61.31,67.39,74.23,171.42,176.74,
+  182.81,188.88,194.96,201.04,207.11,6.63,12.71,18.78,24.86,80.3,
+  165.35,213.19,219.26,225.34,231.41,0.56,86.37,92.45,98.52,147.12,
+  153.2,159.27,237.49,0.56,104.6,110.67,116.75,122.82,128.9,134.97,
+  141.05,237.49,6.63,12.71,18.78,24.86,213.19,219.26,225.34,30.93,
+  37.01,43.08,49.16,55.24,182.81,188.88,194.96,201.04,207.11,61.31,
+  67.39,73.46,79.53,85.61,152.44,158.51,164.59,170.66,176.74,91.69,
+  97.76,103.83,109.91,115.99,122.06,128.13,134.21,140.28,146.36,
 ]
 
-const CW_DELAYS  = { A: 0,   B: 0.3, C: 0.6, D: 0.9, E: 1.2, F: 1.5 }
-const CCW_DELAYS = { A: 1.5, B: 1.2, C: 0.9, D: 0.6, E: 0.3, F: 0   }
-
-function groupRules(sel, groups, anim, dur, delays) {
-  return 'ABCDEF'.split('').map(g => {
-    const idx = groups.map((x, i) => x === g ? i + 1 : 0).filter(Boolean)
-    if (!idx.length) return ''
-    const s = idx.map(i => `${sel} path:nth-child(${i})`).join(',')
-    return `${s}{animation:${anim} ${dur}s ease-in-out infinite;animation-delay:-${delays[g]}s}`
+// Per-path delay: each symbol gets a unique phase based on its X position
+function pathRules(sel, xs, anim, dur, cw) {
+  const minX = Math.min(...xs)
+  const maxX = Math.max(...xs)
+  const range = maxX - minX
+  return xs.map((x, i) => {
+    const t = (x - minX) / range
+    const delay = (cw ? t : 1 - t) * dur
+    return `${sel} path:nth-child(${i + 1}){animation:${anim} ${dur}s ease-in-out infinite;animation-delay:-${delay.toFixed(3)}s}`
   }).join('')
 }
 
 function buildSpinCSS(spinning, dir) {
   if (!spinning) return '#pot-body path,#wavy-band path,#wheel-base path{animation:none;transform:none;transition:transform 0.4s ease}'
-  const d = dir === 'cw' ? CW_DELAYS : CCW_DELAYS
+  const cw = dir === 'cw'
   return (
-    groupRules('#pot-body',   POT_BODY_GROUPS,   'wavePeak',      1.8, d) +
-    groupRules('#wavy-band',  WAVY_BAND_GROUPS,  'wavePeakWavy',  1.4, d) +
-    groupRules('#wheel-base', WHEEL_BASE_GROUPS, 'wavePeakWheel', 2.4, d)
+    pathRules('#pot-body',   POT_BODY_X,   'wavePeak',      1.8, cw) +
+    pathRules('#wavy-band',  WAVY_BAND_X,  'wavePeakWavy',  1.4, cw) +
+    pathRules('#wheel-base', WHEEL_BASE_X, 'wavePeakWheel', 2.4, cw)
   )
 }
 
