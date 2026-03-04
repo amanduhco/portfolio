@@ -323,33 +323,39 @@ body { overscroll-behavior: none; }
 }
 
 /* ════════════════════════════════════════
+   POTTERY WHEEL — base opacity
+   ════════════════════════════════════════ */
+#pot-body path, #wavy-band path, #wheel-base path { opacity: 0.6; }
+
+/* ════════════════════════════════════════
    POTTERY WHEEL — keyframes
    ════════════════════════════════════════ */
-@keyframes waveTravel {
-  0%   { opacity: 0.2; transform: scaleY(0.8); }
-  50%  { opacity: 1;   transform: scaleY(1.05); }
-  100% { opacity: 0.2; transform: scaleY(0.8); }
+
+/* Pot body: 0.6 rest → 1.0 peak → 0.3 shadow → 0.6 */
+@keyframes wavePeak {
+  0%   { opacity: 0.6; }
+  15%  { opacity: 1.0; }
+  40%  { opacity: 0.3; }
+  70%  { opacity: 0.6; }
+  100% { opacity: 0.6; }
 }
 
-@keyframes potRipple {
-  0%   { opacity: 1; }
-  50%  { opacity: 0.35; }
-  100% { opacity: 1; }
+/* Wavy band: higher contrast + subtle scaleY bulge */
+@keyframes wavePeakWavy {
+  0%   { opacity: 0.6; transform: scaleY(1);    }
+  15%  { opacity: 1.0; transform: scaleY(1.08); }
+  40%  { opacity: 0.15; transform: scaleY(0.95); }
+  70%  { opacity: 0.6; transform: scaleY(1);    }
+  100% { opacity: 0.6; transform: scaleY(1);    }
 }
 
-@keyframes wheelTurn {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes wheelSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes wheelTurntable {
-  0%   { transform: perspective(300px) rotateX(70deg) rotateZ(0deg); }
-  100% { transform: perspective(300px) rotateX(70deg) rotateZ(360deg); }
+/* Wheel base: slower, wider opacity swing */
+@keyframes wavePeakWheel {
+  0%   { opacity: 0.5; }
+  15%  { opacity: 1.0; }
+  40%  { opacity: 0.4; }
+  70%  { opacity: 0.5; }
+  100% { opacity: 0.5; }
 }
 
 /* ════════════════════════════════════════
