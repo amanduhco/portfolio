@@ -1,42 +1,264 @@
 @import "tailwindcss";
 
+/* ── Tokens ── */
 :root {
-  --color-text: #333333;
-  --color-muted: #999999;
-  --color-bg: #F2F2F2;
+  --color-text:   #333333;
+  --color-muted:  #999999;
+  --color-bg:     #F2F2F2;
   --color-border: #DDDDDD;
-  --font-base: 'Futura', 'Century Gothic', sans-serif;
+  --font:         'Futura', 'Century Gothic', sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body, #root {
   height: 100%;
-  background-color: var(--color-bg);
+  background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-base);
+  font-family: var(--font);
   -webkit-font-smoothing: antialiased;
 }
 
-/* BrowserGuy ZZZ animation */
-.zzz {
-  opacity: 0;
+body { overscroll-behavior: none; }
+
+/* ════════════════════════════════════════
+   DESKTOP LAYOUT  (≥ 768px)
+   ════════════════════════════════════════ */
+
+.portfolio {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
-@keyframes zzzFloat {
-  0%   { opacity: 0;   transform: translateY(0px); }
-  20%  { opacity: 1;   transform: translateY(-1px); }
-  75%  { opacity: 0.8; transform: translateY(-3px); }
-  100% { opacity: 0;   transform: translateY(-4px); }
+/* Left sidebar */
+.left-panel {
+  width: 268px;
+  min-width: 268px;
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 32px;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-bg);
+  z-index: 10;
 }
 
-.zzz-active {
-  animation: zzzFloat 2s ease-in-out infinite;
+.panel-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.zzz-delay-0 { animation-delay: 0s; }
-.zzz-delay-1 { animation-delay: 0.35s; }
-.zzz-delay-2 { animation-delay: 0.7s; }
+
+.panel-name {
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+
+.panel-nav {
+  margin-top: 166px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-link {
+  display: block;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  font-size: 22px;
+  font-family: var(--font);
+  color: var(--color-muted);
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  text-align: left;
+}
+.nav-link.active { color: var(--color-text); }
+
+/* Right scrollable panel */
+.right-panel {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* "designer" sticky bar — desktop only */
+.designer-bar {
+  position: sticky;
+  top: 0;
+  padding: 28px 48px;
+  background: var(--color-bg);
+  z-index: 10;
+}
+.designer-label { font-size: 13px; }
+
+/* ── Sections ── */
+.section {
+  padding: 80px 48px 140px;
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0 48px;
+}
+
+.section-label {
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.section-subtitle {
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-top: 4px;
+}
+
+.bio-text {
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.project-title {
+  font-size: 38px;
+  font-weight: 300;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+/* Work section */
+.work-section {
+  padding: 0 48px 160px;
+}
+.work-entry + .work-entry {
+  margin-top: 72px;
+}
+
+/* Placeholder sections */
+.placeholder-section {
+  min-height: 60vh;
+  padding: 0 48px 120px;
+}
+.last-section {
+  padding-bottom: max(120px, env(safe-area-inset-bottom));
+}
+
+/* ════════════════════════════════════════
+   MOBILE LAYOUT  (< 768px)
+   ════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Portfolio becomes normal block flow */
+  .portfolio {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Left panel → sticky mobile header */
+  .left-panel {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    padding: max(12px, env(safe-area-inset-top)) 24px 12px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .panel-top {
+    margin-bottom: 10px;
+  }
+
+  .panel-name {
+    font-size: 16px;
+  }
+
+  /* Nav becomes horizontal row */
+  .panel-nav {
+    margin-top: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nav-link {
+    font-size: 16px;
+    padding: 0;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Right panel → normal page scroll */
+  .right-panel {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  /* Hide desktop-only elements */
+  .designer-bar { display: none; }
+
+  /* Sections */
+  .section {
+    padding: 60px 24px 80px;
+  }
+
+  .section-grid {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+  }
+
+  .bio-text {
+    font-size: 16px;
+    max-width: 100%;
+  }
+
+  .project-title {
+    font-size: 28px;
+  }
+
+  .work-section {
+    padding: 0 24px 80px;
+  }
+
+  .work-entry + .work-entry {
+    margin-top: 48px;
+  }
+
+  .placeholder-section {
+    min-height: 40vh;
+    padding: 0 24px 80px;
+  }
+
+  .last-section {
+    padding-bottom: max(48px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ════════════════════════════════════════
+   BROWSER MASCOT — ZZZ animation
+   ════════════════════════════════════════ */
+.zzz { opacity: 0; }
+
+@keyframes zzz {
+  0%   { opacity: 0; transform: translateY(0); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-4px); }
+}
+
+.zzz-active            { animation: zzz 1.6s ease-in-out infinite; }
+.zzz-active.zzz-d0     { animation-delay: 0s; }
+.zzz-active.zzz-d1     { animation-delay: 0.4s; }
+.zzz-active.zzz-d2     { animation-delay: 0.8s; }
