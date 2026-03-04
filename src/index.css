@@ -347,6 +347,11 @@ body { overscroll-behavior: none; }
   to   { transform: rotate(360deg); }
 }
 
+@keyframes wheelTurntable {
+  0%   { transform: perspective(300px) rotateX(70deg) rotateZ(0deg); }
+  100% { transform: perspective(300px) rotateX(70deg) rotateZ(360deg); }
+}
+
 /* ════════════════════════════════════════
    BROWSER MASCOT — ZZZ animation
    ════════════════════════════════════════ */

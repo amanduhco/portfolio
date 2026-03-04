@@ -51,10 +51,12 @@ export default function PotteryWheelAnimation() {
     transition: 'transform 80ms ease',
   }
   const wheelStyle = {
-    animation: `wheelSpin ${wheelDuration} linear infinite`,
+    animation: `wheelTurntable ${wheelDuration} linear infinite`,
     animationPlayState: wheelPaused ? 'paused' : 'running',
+    animationFillMode: 'both',
     transformBox: 'fill-box',
-    transformOrigin: 'center',
+    transformOrigin: 'center center',
+    transformStyle: 'preserve-3d',
   }
 
   return (
