@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import BrowserGuy from './BrowserGuy'
+import PotteryWheelAnimation from './PotteryWheelAnimation'
 
 const NAV = ['hello', 'work', 'fun', 'me']
 
@@ -115,8 +116,29 @@ export default function App() {
         </section>
 
         {/* ── Me ── */}
-        <section ref={meRef} className="placeholder-section last-section">
-          <span className="section-label">✦ me</span>
+        <section ref={meRef} className="me-section last-section">
+          {/* Left: label */}
+          <div>
+            <span className="section-label">✦ me</span>
+          </div>
+
+          {/* Center: bio + photo placeholder */}
+          <div>
+            <p className="bio-text">
+              Designer based in New York. I care a lot about craft —
+              the kind that shows up in the details. When I'm not pushing
+              pixels I'm usually throwing pots, sketching, or overanalyzing
+              type choices nobody else notices.
+            </p>
+          </div>
+
+          {/* Right: date + pottery wheel */}
+          <div className="me-right">
+            <span className="me-date">2022 – now</span>
+            <div className="pottery-wrapper">
+              <PotteryWheelAnimation />
+            </div>
+          </div>
         </section>
 
       </main>
