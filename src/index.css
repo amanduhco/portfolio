@@ -93,7 +93,10 @@ body { overscroll-behavior: none; }
 .designer-bar {
   position: sticky;
   top: 0;
-  padding: 28px 48px;
+  padding: 0 48px;
+  height: 90px; /* 28px + 34px (BrowserGuy) + 28px — mirrors left panel header */
+  display: flex;
+  align-items: center;
   background: var(--color-bg);
   z-index: 10;
 }
