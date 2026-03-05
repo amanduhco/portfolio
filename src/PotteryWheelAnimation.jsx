@@ -36,14 +36,14 @@ function pathRules(sel, xs, anim, dur, cw, gMin, gMax) {
   return xs.map((x, i) => {
     const t = (x - gMin) / range
     const delay = (cw ? t : 1 - t) * dur
-    return `${sel} path:nth-child(${i + 1}){animation:${anim} ${dur}s ease-in-out infinite;animation-delay:-${delay.toFixed(3)}s}`
+    return `${sel} path:nth-child(${i + 1}){animation:${anim} ${dur}s linear infinite;animation-delay:-${delay.toFixed(3)}s}`
   }).join('')
 }
 
 function buildSpinCSS(spinning, dir) {
   if (!spinning) return '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;transform:none;transition:transform 0.4s ease}'
   const cw = dir === 'cw'
-  const dur = 1.8
+  const dur = 2.4
   const allX = [...POT_TOP_X, ...POT_BODY_X, ...WAVY_BAND_X, ...WHEEL_BASE_X]
   const gMin = Math.min(...allX)
   const gMax = Math.max(...allX)
