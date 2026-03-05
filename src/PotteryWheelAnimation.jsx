@@ -3,6 +3,11 @@ import { useState } from 'react'
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
 // X coordinate of every animated path, in SVG order
+const POT_TOP_X = [
+  92.02,98.09,104.17,110.24,116.32,122.39,128.47,134.54,140.61,146.69,152.77,
+  98.09,146.69,
+  104.60,110.68,116.75,122.82,128.90,134.97,141.05,
+]
 const POT_BODY_X = [
   104.6,141.05,104.6,110.67,116.75,122.82,128.9,134.97,141.05,104.6,
   110.67,116.75,122.82,128.9,134.97,141.05,86.37,92.45,98.52,147.12,
@@ -37,9 +42,10 @@ function pathRules(sel, xs, anim, dur, cw) {
 }
 
 function buildSpinCSS(spinning, dir) {
-  if (!spinning) return '#pot-body path,#wavy-band path,#wheel-base path{animation:none;transform:none;transition:transform 0.4s ease}'
+  if (!spinning) return '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;transform:none;transition:transform 0.4s ease}'
   const cw = dir === 'cw'
   return (
+    pathRules('#pot-top',    POT_TOP_X,    'wavePeak',      1.8, cw) +
     pathRules('#pot-body',   POT_BODY_X,   'wavePeak',      1.8, cw) +
     pathRules('#wavy-band',  WAVY_BAND_X,  'wavePeakWavy',  1.4, cw) +
     pathRules('#wheel-base', WHEEL_BASE_X, 'wavePeakWheel', 2.4, cw)

@@ -325,7 +325,7 @@ body { overscroll-behavior: none; }
 /* ════════════════════════════════════════
    POTTERY WHEEL — base transform context
    ════════════════════════════════════════ */
-#pot-body path, #wavy-band path, #wheel-base path {
+#pot-top path, #pot-body path, #wavy-band path, #wheel-base path {
   transform-box: fill-box;
   transform-origin: center;
 }
