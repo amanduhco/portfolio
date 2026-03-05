@@ -1,11 +1,15 @@
 import { useState, useRef } from 'react'
 import BrowserGuy from './BrowserGuy'
 import PotteryWheelAnimation from './PotteryWheelAnimation'
+import amandaPhoto from './assets/amanda-photo.jpeg'
+
+const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
 const NAV = ['hello', 'work', 'fun', 'me']
 
 export default function App() {
   const [activeNav, setActiveNav] = useState('hello')
+  const [showPhoto, setShowPhoto] = useState(false)
 
   // leftPanelRef doubles as the mobile sticky header for height measurement
   const leftPanelRef = useRef(null)
@@ -76,9 +80,35 @@ export default function App() {
             </div>
             <div>
               <p className="bio-text">
-                I'm a passionate designer that loves blah blah blah. This can be FPO
-                for now, and I can save this space for when I've thought of it.
-                Crafting high quality designs @ Mercury. Previously at Rev.
+                I'm{' '}
+                <span
+                  className="amanda-hover"
+                  onMouseEnter={!IS_TOUCH ? () => setShowPhoto(true)  : undefined}
+                  onMouseLeave={!IS_TOUCH ? () => setShowPhoto(false) : undefined}
+                  onTouchStart={ IS_TOUCH ? () => setShowPhoto(true)  : undefined}
+                  onTouchEnd={   IS_TOUCH ? () => { setTimeout(() => setShowPhoto(false), 1500) } : undefined}
+                >
+                  Amanda
+                  <img
+                    src={amandaPhoto}
+                    alt=""
+                    className={`amanda-photo${showPhoto ? ' visible' : ''}`}
+                  />
+                </span>
+                , a product designer who turns complexity into clarity.
+                I'm passionate about crafting tools that work beautifully, building
+                genuine trust in AI, and finding the joy in the functional.
+              </p>
+              <p className="bio-text bio-currently">
+                Currently @{' '}
+                <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="company-link">Mercury</a>.
+              </p>
+              <p className="bio-text bio-prev">
+                Previously at{' '}
+                <a href="https://rev.com" target="_blank" rel="noopener noreferrer" className="company-link">Rev</a>,{' '}
+                <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link">Michaels</a>,{' '}
+                and{' '}
+                <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">Whole Foods Market</a>.
               </p>
             </div>
           </div>
@@ -87,24 +117,79 @@ export default function App() {
         {/* ── Work ── */}
         <div ref={workRef} className="work-section">
 
-          <div className="section-grid work-entry">
-            <div className="section-meta">
-              <div className="section-label">✦ mercury</div>
-              <div className="section-subtitle">product designer</div>
+          {/* Mercury */}
+          <div className="company-block">
+            <div className="company-header">
+              <span className="work-label">✦ work</span>
+              <span className="company-name-role">
+                <span className="company-name">mercury</span>
+                <span className="company-role"> product designer</span>
+              </span>
+              <span className="company-date">jun 2022 – present</span>
             </div>
-            <div>
-              <div className="project-title">accounting experience</div>
-              <div className="project-title">accounting integrations</div>
+            <div className="company-divider" />
+
+            <div className="company-intro">
+              <p className="intro-text"><strong>Mercury</strong> is a financial technology company building banking infrastructure for startups and businesses.</p>
+              <p className="intro-text">As a product designer on the core product team, I own end-to-end design for accounting and financial operations features — from early discovery through shipped product.</p>
+              <p className="contact-note">For in-depth details of my work, please contact me.</p>
+            </div>
+
+            <div className="project-entries">
+              <div className="project-entry">
+                <div className="project-text">
+                  <div className="work-project-title">accounting experience</div>
+                  <p className="project-desc">Redesigned Mercury's core accounting workflows to reduce friction for founders managing their finances. Focused on clarity, speed, and building trust through transparency.</p>
+                  <p className="project-desc">Led research, interaction design, and visual design across web and mobile surfaces.</p>
+                </div>
+                <div className="project-image" />
+              </div>
+              <div className="project-entry">
+                <div className="project-text">
+                  <div className="work-project-title">accounting integrations</div>
+                  <p className="project-desc">Designed the integrations experience connecting Mercury to QuickBooks, Xero, and other accounting tools used by small business owners.</p>
+                  <p className="project-desc">Worked closely with engineering and partnerships to ship a scalable integration framework.</p>
+                </div>
+                <div className="project-image" />
+              </div>
             </div>
           </div>
 
-          <div className="section-grid work-entry">
-            <div className="section-meta">
-              <div className="section-label">✦ rev</div>
-              <div className="section-subtitle">product designer</div>
+          {/* Rev */}
+          <div className="company-block">
+            <div className="company-header">
+              <span className="work-label">✦ work</span>
+              <span className="company-name-role">
+                <span className="company-name">rev</span>
+                <span className="company-role"> product designer</span>
+              </span>
+              <span className="company-date">2020 – 2022</span>
             </div>
-            <div>
-              <div className="project-title">API playground</div>
+            <div className="company-divider" />
+
+            <div className="company-intro">
+              <p className="intro-text"><strong>Rev</strong> is a speech technology company providing transcription, captions, and translation services.</p>
+              <p className="intro-text">Contributed to the consumer and enterprise product experience, focusing on order flows and account management.</p>
+              <p className="contact-note">For in-depth details of my work, please contact me.</p>
+            </div>
+
+            <div className="project-entries">
+              <div className="project-entry">
+                <div className="project-text">
+                  <div className="work-project-title">API playground</div>
+                  <p className="project-desc">Designed an interactive API playground allowing developers to test Rev's transcription API directly in the browser.</p>
+                  <p className="project-desc">Balanced technical depth with accessibility for non-developer users.</p>
+                </div>
+                <div className="project-image" />
+              </div>
+              <div className="project-entry">
+                <div className="project-text">
+                  <div className="work-project-title">order experience</div>
+                  <p className="project-desc">Redesigned the end-to-end order flow for human transcription and captions, reducing drop-off and improving clarity around turnaround times and pricing.</p>
+                  <p className="project-desc">Conducted usability testing and iterated based on customer feedback.</p>
+                </div>
+                <div className="project-image" />
+              </div>
             </div>
           </div>
 

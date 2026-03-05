@@ -125,24 +125,124 @@ body { overscroll-behavior: none; }
 }
 
 .bio-text {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
   max-width: 480px;
 }
 
-.project-title {
-  font-size: 38px;
-  font-weight: 300;
-  line-height: 1.25;
+/* ════════════════════════════════════════
+   WORK SECTION
+   ════════════════════════════════════════ */
+
+.work-section {
+  padding: 48px 48px 160px;
+}
+
+.company-block + .company-block {
+  margin-top: 96px;
+}
+
+.company-header {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  align-items: baseline;
+  gap: 0 48px;
+  margin-bottom: 12px;
+}
+
+.work-label {
+  font-size: 12px;
+  color: var(--color-muted);
+  letter-spacing: 0.05em;
+}
+
+.company-name {
+  font-size: 15px;
+  font-weight: 600;
   color: var(--color-text);
 }
 
-/* Work section */
-.work-section {
-  padding: 0 48px 160px;
+.company-role {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--color-muted);
 }
-.work-entry + .work-entry {
-  margin-top: 72px;
+
+.company-date {
+  font-size: 13px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.company-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 0 0 32px;
+  margin-left: 228px; /* 180px col + 48px gap — aligns with hello body copy */
+}
+
+.company-intro {
+  max-width: 500px;
+  margin-bottom: 48px;
+  padding-left: 228px; /* 180px col + 48px gap — aligns with hello body copy */
+}
+
+.intro-text {
+  font-size: 14px;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.intro-text + .intro-text {
+  margin-top: 12px;
+}
+
+.intro-text strong {
+  font-weight: 600;
+}
+
+.contact-note {
+  font-size: 13px;
+  color: var(--color-muted);
+  margin-top: 8px;
+}
+
+.project-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding-left: 228px; /* 180px col + 48px gap — aligns with hello body copy */
+}
+
+.project-entry {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 0 48px;
+  align-items: start;
+}
+
+.work-project-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 12px;
+}
+
+.project-desc {
+  font-size: 13px;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.project-desc + .project-desc {
+  margin-top: 10px;
+}
+
+.project-image {
+  background: #E5E5F0;
+  border-radius: 12px;
+  aspect-ratio: 16 / 9;
+  width: 100%;
 }
 
 /* Placeholder sections */
@@ -229,16 +329,43 @@ body { overscroll-behavior: none; }
     max-width: 100%;
   }
 
-  .project-title {
-    font-size: 28px;
-  }
-
   .work-section {
-    padding: 0 24px 80px;
+    padding: 48px 24px 80px;
   }
 
-  .work-entry + .work-entry {
-    margin-top: 48px;
+  .company-header {
+    grid-template-columns: auto 1fr;
+    gap: 0 16px;
+  }
+
+  .company-date {
+    grid-column: 2;
+  }
+
+  .company-divider {
+    margin-left: 0;
+  }
+
+  .company-intro {
+    max-width: 100%;
+    padding-left: 0;
+  }
+
+  .project-entries {
+    padding-left: 0;
+  }
+
+  .project-entries {
+    gap: 48px;
+  }
+
+  .project-entry {
+    grid-template-columns: 1fr;
+    gap: 16px 0;
+  }
+
+  .project-image {
+    border-radius: 8px;
   }
 
   .placeholder-section {
@@ -338,28 +465,81 @@ body { overscroll-behavior: none; }
    POTTERY WHEEL — keyframes (opacity wave)
    ════════════════════════════════════════ */
 
-/* Pot body / top / wavy band: CCW opacity pulse */
+/* Pot body / top / wavy band: CCW opacity pulse — lower baseline for more contrast */
 @keyframes wavePot {
-  0%   { opacity: 0.6; }
+  0%   { opacity: 0.3; }
   15%  { opacity: 1.0; }
-  30%  { opacity: 0.6; }
-  100% { opacity: 0.6; }
+  30%  { opacity: 0.3; }
+  100% { opacity: 0.3; }
 }
 
-/* Wheel base far side (top, receding): subtle brightness rise */
+/* Wheel base far side (top, receding): dark at rest — goes nearly black when not lit,
+   briefly bright as the spoke sweeps past. When near-bottom peaks (delay offset 1.2s apart),
+   this is deep in its dark phase → strong depth separation. */
 @keyframes waveWheelFar {
-  0%   { opacity: 0.6; }
-  15%  { opacity: 0.7; }
-  30%  { opacity: 0.6; }
-  100% { opacity: 0.6; }
+  0%   { opacity: 0.12; }
+  15%  { opacity: 0.9;  }
+  30%  { opacity: 0.12; }
+  100% { opacity: 0.12; }
 }
 
-/* Wheel base near side (bottom, approaching): full brightness + scale */
+/* Wheel base near side (bottom, facing viewer): naturally lighter baseline,
+   maximum brightness + noticeable scale at peak. */
 @keyframes waveWheelNear {
-  0%   { opacity: 0.6; transform: scale(1);    }
-  15%  { opacity: 1.0; transform: scale(1.04); }
-  30%  { opacity: 0.6; transform: scale(1);    }
-  100% { opacity: 0.6; transform: scale(1);    }
+  0%   { opacity: 0.5;  transform: scale(1);    }
+  15%  { opacity: 1.0;  transform: scale(1.1);  }
+  30%  { opacity: 0.5;  transform: scale(1);    }
+  100% { opacity: 0.5;  transform: scale(1);    }
+}
+
+/* ════════════════════════════════════════
+   HELLO SECTION
+   ════════════════════════════════════════ */
+
+.company-link {
+  color: var(--color-text);
+  text-decoration: none;
+}
+.company-link:visited { color: var(--color-text); }
+.company-link:hover   { text-decoration: underline; }
+
+.bio-currently { margin-top: 16px; }
+.bio-prev      { color: var(--color-muted); }
+
+.amanda-hover {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+}
+
+.amanda-photo {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  width: 140px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 120ms ease-in, transform 120ms ease-in;
+}
+.amanda-photo.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 180ms ease-out, transform 180ms ease-out;
+}
+
+@media (max-width: 767px) {
+  .amanda-photo {
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+  }
+  .amanda-photo.visible {
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 /* ════════════════════════════════════════

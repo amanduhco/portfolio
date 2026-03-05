@@ -73,7 +73,21 @@ const WHEEL_DATA = [
 ]
 
 function buildSpinCSS(spinning) {
-  if (!spinning) return '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;opacity:0.6;transition:opacity 0.8s ease}'
+  if (!spinning) {
+    // At rest: near paths (bottom of disc) slightly lighter, far paths (top) slightly darker
+    const nearSelectors = WHEEL_DATA
+      .map(([, near], i) => near ? `#wheel-base path:nth-child(${i + 1})` : null)
+      .filter(Boolean).join(',')
+    const farSelectors = WHEEL_DATA
+      .map(([, near], i) => !near ? `#wheel-base path:nth-child(${i + 1})` : null)
+      .filter(Boolean).join(',')
+    return (
+      '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;transition:opacity 0.6s ease}' +
+      `#pot-top path,#pot-body path,#wavy-band path{opacity:0.6}` +
+      `${nearSelectors}{opacity:0.5}` +
+      `${farSelectors}{opacity:0.22}`
+    )
+  }
 
   const potRule = (sel, xs, dur) => xs.map((x, i) => {
     const d = potDelay(x)
