@@ -2,81 +2,116 @@ import { useState } from 'react'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
-// X coordinate of every animated path, in SVG order
+// X coords of pot-top paths (20 paths, SVG order)
 const POT_TOP_X = [
   92.02,98.09,104.17,110.24,116.32,122.39,128.47,134.54,140.61,146.69,152.77,
   98.09,146.69,
   104.60,110.68,116.75,122.82,128.90,134.97,141.05,
 ]
+// X coords of pot-body paths (27 paths)
 const POT_BODY_X = [
   104.6,141.05,104.6,110.67,116.75,122.82,128.9,134.97,141.05,104.6,
   110.67,116.75,122.82,128.9,134.97,141.05,86.37,92.45,98.52,147.12,
   153.2,159.27,80.3,165.35,74.23,80.3,171.42,
 ]
+// X coords of wavy-band paths (23 paths)
 const WAVY_BAND_X = [
   68.15,87.05,93.12,123.5,129.57,159.94,166.02,177.5,68.15,74.9,
   80.97,99.19,117.42,135.64,153.87,172.09,177.5,68.15,105.27,111.35,
   141.72,147.79,177.5,
 ]
-const WHEEL_BASE_X = [
-  30.93,37.01,43.08,49.16,55.24,61.31,67.39,74.23,171.42,176.74,
-  182.81,188.88,194.96,201.04,207.11,6.63,12.71,18.78,24.86,80.3,
-  165.35,213.19,219.26,225.34,231.41,0.56,86.37,92.45,98.52,147.12,
-  153.2,159.27,237.49,0.56,104.6,110.67,116.75,122.82,128.9,134.97,
-  141.05,237.49,6.63,12.71,18.78,24.86,213.19,219.26,225.34,30.93,
-  37.01,43.08,49.16,55.24,182.81,188.88,194.96,201.04,207.11,61.31,
-  67.39,73.46,79.53,85.61,152.44,158.51,164.59,170.66,176.74,91.69,
-  97.76,103.83,109.91,115.99,122.06,128.13,134.21,140.28,146.36,
-]
 
-// Per-path delay: each symbol gets a unique phase based on its X position.
-// gMin/gMax are shared across all groups so phases are globally coherent.
-function pathRules(sel, xs, anim, dur, cw, gMin, gMax) {
-  const range = gMax - gMin
-  return xs.map((x, i) => {
-    const t = (x - gMin) / range
-    const delay = (cw ? t : 1 - t) * dur
-    return `${sel} path:nth-child(${i + 1}){animation:${anim} ${dur}s linear infinite;animation-delay:-${delay.toFixed(3)}s}`
-  }).join('')
+// CCW pot-body group delay by X column (wave fires right→left: F first, A last)
+function potDelay(x) {
+  if (x > 162)  return 0    // F: rightEdge
+  if (x >= 132) return 0.3  // E
+  if (x >= 121) return 0.6  // D
+  if (x >= 110) return 0.9  // C
+  if (x >= 80)  return 1.2  // B
+  return 1.5                // A: leftEdge
 }
 
-function buildSpinCSS(spinning, dir) {
-  if (!spinning) return '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;transform:none;transition:transform 0.4s ease}'
-  const cw = dir === 'cw'
-  const dur = 2.4
-  const allX = [...POT_TOP_X, ...POT_BODY_X, ...WAVY_BAND_X, ...WHEEL_BASE_X]
-  const gMin = Math.min(...allX)
-  const gMax = Math.max(...allX)
+// Wheel base: 79 paths in SVG order. Each entry: [delay_seconds, is_near_side]
+// Radial groups from center (119,184), CCW delays: 0°→0s, 315°→0.3s, …, 45°→2.1s
+// Near side = Y ≥ 191 (bottom of disc, faces viewer) — peak opacity 1.0 + scale(1.04)
+// Far side  = Y < 191  (top of disc, recedes)        — peak opacity 0.7
+const WHEEL_DATA = [
+  // Row Y≈144 — far side (15 paths)
+  [1.5,0],[1.5,0],[1.5,0],[1.5,0],[1.5,0],[1.5,0],[1.5,0], // 0-6:  135°
+  [1.5,0],                                                   // 7:   135° (X)
+  [2.1,0],                                                   // 8:   45°  (X)
+  [2.1,0],[2.1,0],[2.1,0],[2.1,0],[2.1,0],[2.1,0],          // 9-14: 45°
+  // Row Y≈156 — far side (10 paths)
+  [1.2,0],[1.2,0],[1.2,0],[1.2,0],                          // 15-18: 180°
+  [1.5,0],                                                   // 19:  135° (X)
+  [2.1,0],                                                   // 20:   45° (X)
+  [0,0],[0,0],[0,0],[0,0],                                   // 21-24:  0°
+  // Row Y≈168 — far side (8 paths)
+  [1.2,0],                                                   // 25:  180°
+  [1.5,0],[1.5,0],[1.5,0],                                   // 26-28: 135° (X)
+  [2.1,0],[2.1,0],[2.1,0],                                   // 29-31:  45° (X)
+  [0,0],                                                     // 32:    0°
+  // Row Y≈177-180 — far side (9 paths)
+  [1.2,0],                                                   // 33:  180°
+  [1.5,0],[1.5,0],                                           // 34-35: 135° (X)
+  [1.8,0],                                                   // 36:   90° (center-top X)
+  [2.1,0],[2.1,0],[2.1,0],                                   // 37-39:  45° (X)
+  [0,0],[0,0],                                               // 40-41:  0°
+  // Row Y≈191 — near side (7 paths)
+  [1.2,1],[1.2,1],[1.2,1],[1.2,1],                          // 42-45: 180°
+  [0,1],[0,1],[0,1],                                         // 46-48:  0°
+  // Row Y≈203 — near side (10 paths)
+  [1.2,1],[1.2,1],[1.2,1],[1.2,1],[1.2,1],                  // 49-53: 180°
+  [0.3,1],[0.3,1],[0.3,1],[0.3,1],[0.3,1],                  // 54-58: 315°
+  // Row Y≈214 — near side (10 paths)
+  [0.9,1],[0.9,1],[0.9,1],[0.9,1],[0.9,1],                  // 59-63: 225°
+  [0.3,1],[0.3,1],[0.3,1],[0.3,1],[0.3,1],                  // 64-68: 315°
+  // Row Y≈226 — near side, closest to viewer (10 paths)
+  [0.9,1],[0.9,1],                                           // 69-70: 225°
+  [0.6,1],[0.6,1],[0.6,1],[0.6,1],[0.6,1],[0.6,1],          // 71-76: 270°
+  [0.3,1],[0.3,1],                                           // 77-78: 315°
+]
+
+function buildSpinCSS(spinning) {
+  if (!spinning) return '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;opacity:0.6;transition:opacity 0.8s ease}'
+
+  const potRule = (sel, xs, dur) => xs.map((x, i) => {
+    const d = potDelay(x)
+    return `${sel} path:nth-child(${i+1}){animation:wavePot ${dur}s ease-in-out infinite;animation-delay:${d}s}`
+  }).join('')
+
+  const wheelRule = WHEEL_DATA.map(([d, near], i) =>
+    `#wheel-base path:nth-child(${i+1}){animation:${near ? 'waveWheelNear' : 'waveWheelFar'} 2.4s ease-in-out infinite;animation-delay:${d}s}`
+  ).join('')
+
   return (
-    pathRules('#pot-top',    POT_TOP_X,    'wavePeak',      dur, cw, gMin, gMax) +
-    pathRules('#pot-body',   POT_BODY_X,   'wavePeak',      dur, cw, gMin, gMax) +
-    pathRules('#wavy-band',  WAVY_BAND_X,  'wavePeakWavy',  dur, cw, gMin, gMax) +
-    pathRules('#wheel-base', WHEEL_BASE_X, 'wavePeakWheel', dur, cw, gMin, gMax)
+    potRule('#pot-top',   POT_TOP_X,   1.8) +
+    potRule('#pot-body',  POT_BODY_X,  1.8) +
+    potRule('#wavy-band', WAVY_BAND_X, 1.4) +
+    wheelRule
   )
 }
 
 export default function PotteryWheelAnimation() {
   const [isSpinning, setIsSpinning]       = useState(false)
-  const [direction, setDirection]         = useState('cw')
   const [hasInteracted, setHasInteracted] = useState(false)
 
-  function startSpin(dir = 'cw') { setIsSpinning(true); setDirection(dir) }
-  function stopSpin()             { setIsSpinning(false) }
+  function startSpin() { setIsSpinning(true) }
+  function stopSpin()  { setIsSpinning(false) }
   function toggleSpin() {
     if (!hasInteracted) setHasInteracted(true)
-    if (isSpinning) stopSpin()
-    else startSpin('ccw')
+    setIsSpinning(s => !s)
   }
 
   return (
     <div
       className={`pottery-wrapper${isSpinning ? ' is-spinning' : ''}`}
-      onMouseEnter={!IS_TOUCH ? () => startSpin('cw') : undefined}
-      onMouseLeave={!IS_TOUCH ? stopSpin   : undefined}
+      onMouseEnter={!IS_TOUCH ? startSpin : undefined}
+      onMouseLeave={!IS_TOUCH ? stopSpin  : undefined}
       onTouchStart={ IS_TOUCH ? toggleSpin : undefined}
       style={{ cursor: IS_TOUCH ? 'pointer' : 'grab' }}
     >
-      <style>{buildSpinCSS(isSpinning, direction)}</style>
+      <style>{buildSpinCSS(isSpinning)}</style>
       <svg viewBox='0 0 243 236' width='243' height='236' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <g id='pot-top'>
           <path d="M92.0167 10.0361V4.55653C92.0167 4.14664 92.1066 3.79308 92.2864 3.49584C92.4685 3.19861 92.719 2.9709 93.0378 2.81269C93.359 2.65209 93.7282 2.57179 94.1453 2.57179C94.5527 2.57179 94.9183 2.6485 95.2419 2.80191C95.5655 2.95532 95.8208 3.17344 96.0077 3.45629C96.1947 3.73914 96.2882 4.07712 96.2882 4.47024C96.2882 4.88972 96.1803 5.24328 95.9646 5.53092C95.7489 5.81617 95.4684 6.01872 95.1232 6.13857V6.21048C95.5907 6.25602 95.973 6.43939 96.2702 6.7606C96.5698 7.0794 96.7197 7.49528 96.7197 8.00825C96.7197 8.39657 96.631 8.74414 96.4536 9.05095C96.2762 9.35538 96.0269 9.59628 95.7057 9.77366C95.3845 9.94864 95.0082 10.0361 94.5767 10.0361H93.7713V9.24511H94.5911C94.8524 9.24511 95.0777 9.19238 95.2671 9.08691C95.4588 8.98144 95.6074 8.83522 95.7129 8.64825C95.8184 8.46129 95.8711 8.24795 95.8711 8.00825C95.8711 7.62952 95.7429 7.31671 95.4864 7.06981C95.2299 6.82292 94.8835 6.69947 94.4473 6.69947H93.8001V5.89407H94.2603C94.5024 5.89407 94.711 5.83295 94.8859 5.7107C95.0633 5.58605 95.1999 5.42545 95.2958 5.2289C95.3917 5.02994 95.4396 4.8202 95.4396 4.59968C95.4396 4.2545 95.3246 3.96207 95.0945 3.72236C94.8668 3.48266 94.5551 3.36281 94.1596 3.36281C93.7881 3.36281 93.4789 3.47427 93.232 3.6972C92.9875 3.91772 92.8652 4.20417 92.8652 4.55653V10.0361H92.0167Z" fill='#333333' />

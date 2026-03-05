@@ -326,36 +326,40 @@ body { overscroll-behavior: none; }
 }
 
 /* ════════════════════════════════════════
-   POTTERY WHEEL — base transform context
+   POTTERY WHEEL — base
    ════════════════════════════════════════ */
 #pot-top path, #pot-body path, #wavy-band path, #wheel-base path {
   transform-box: fill-box;
   transform-origin: center;
+  opacity: 0.6;
 }
 
 /* ════════════════════════════════════════
-   POTTERY WHEEL — keyframes (movement)
+   POTTERY WHEEL — keyframes (opacity wave)
    ════════════════════════════════════════ */
 
-/* Pot body + top: scaleX compression simulates cylindrical surface rotating */
-@keyframes wavePeak {
-  0%   { transform: scaleX(1);  }
-  50%  { transform: scaleX(-1); }
-  100% { transform: scaleX(1);  }
+/* Pot body / top / wavy band: CCW opacity pulse */
+@keyframes wavePot {
+  0%   { opacity: 0.6; }
+  15%  { opacity: 1.0; }
+  30%  { opacity: 0.6; }
+  100% { opacity: 0.6; }
 }
 
-/* Wavy band: same scaleX + slight vertical squeeze */
-@keyframes wavePeakWavy {
-  0%   { transform: scaleX(1)  scaleY(1);    }
-  50%  { transform: scaleX(-1) scaleY(0.85); }
-  100% { transform: scaleX(1)  scaleY(1);    }
+/* Wheel base far side (top, receding): subtle brightness rise */
+@keyframes waveWheelFar {
+  0%   { opacity: 0.6; }
+  15%  { opacity: 0.7; }
+  30%  { opacity: 0.6; }
+  100% { opacity: 0.6; }
 }
 
-/* Wheel base: same scaleX compression */
-@keyframes wavePeakWheel {
-  0%   { transform: scaleX(1);  }
-  50%  { transform: scaleX(-1); }
-  100% { transform: scaleX(1);  }
+/* Wheel base near side (bottom, approaching): full brightness + scale */
+@keyframes waveWheelNear {
+  0%   { opacity: 0.6; transform: scale(1);    }
+  15%  { opacity: 1.0; transform: scale(1.04); }
+  30%  { opacity: 0.6; transform: scale(1);    }
+  100% { opacity: 0.6; transform: scale(1);    }
 }
 
 /* ════════════════════════════════════════
