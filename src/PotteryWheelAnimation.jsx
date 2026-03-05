@@ -29,13 +29,12 @@ const WHEEL_BASE_X = [
   97.76,103.83,109.91,115.99,122.06,128.13,134.21,140.28,146.36,
 ]
 
-// Per-path delay: each symbol gets a unique phase based on its X position
-function pathRules(sel, xs, anim, dur, cw) {
-  const minX = Math.min(...xs)
-  const maxX = Math.max(...xs)
-  const range = maxX - minX
+// Per-path delay: each symbol gets a unique phase based on its X position.
+// gMin/gMax are shared across all groups so phases are globally coherent.
+function pathRules(sel, xs, anim, dur, cw, gMin, gMax) {
+  const range = gMax - gMin
   return xs.map((x, i) => {
-    const t = (x - minX) / range
+    const t = (x - gMin) / range
     const delay = (cw ? t : 1 - t) * dur
     return `${sel} path:nth-child(${i + 1}){animation:${anim} ${dur}s ease-in-out infinite;animation-delay:-${delay.toFixed(3)}s}`
   }).join('')
@@ -44,11 +43,15 @@ function pathRules(sel, xs, anim, dur, cw) {
 function buildSpinCSS(spinning, dir) {
   if (!spinning) return '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;transform:none;transition:transform 0.4s ease}'
   const cw = dir === 'cw'
+  const dur = 1.8
+  const allX = [...POT_TOP_X, ...POT_BODY_X, ...WAVY_BAND_X, ...WHEEL_BASE_X]
+  const gMin = Math.min(...allX)
+  const gMax = Math.max(...allX)
   return (
-    pathRules('#pot-top',    POT_TOP_X,    'wavePeak',      1.8, cw) +
-    pathRules('#pot-body',   POT_BODY_X,   'wavePeak',      1.8, cw) +
-    pathRules('#wavy-band',  WAVY_BAND_X,  'wavePeakWavy',  1.4, cw) +
-    pathRules('#wheel-base', WHEEL_BASE_X, 'wavePeakWheel', 2.4, cw)
+    pathRules('#pot-top',    POT_TOP_X,    'wavePeak',      dur, cw, gMin, gMax) +
+    pathRules('#pot-body',   POT_BODY_X,   'wavePeak',      dur, cw, gMin, gMax) +
+    pathRules('#wavy-band',  WAVY_BAND_X,  'wavePeakWavy',  dur, cw, gMin, gMax) +
+    pathRules('#wheel-base', WHEEL_BASE_X, 'wavePeakWheel', dur, cw, gMin, gMax)
   )
 }
 
