@@ -1,7 +1,11 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import BrowserGuy from './BrowserGuy'
 import PotteryWheelAnimation from './PotteryWheelAnimation'
 import amandaPhoto from './assets/amanda-photo.jpeg'
+import mercuryAutomation   from './assets/accounting-automations.png'
+import mercuryFoundations  from './assets/accounting-foundations.png'
+import revDesignSystem     from './assets/rev-design-system.png'
+import revApiPlayground    from './assets/rev-ai-playground.png'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
@@ -20,6 +24,39 @@ export default function App() {
   const meRef    = useRef(null)
 
   const sectionRefs = { hello: helloRef, work: workRef, fun: funRef, me: meRef }
+
+  useEffect(() => {
+    const sections = [
+      { key: 'hello', ref: helloRef },
+      { key: 'work',  ref: workRef  },
+      { key: 'fun',   ref: funRef   },
+      { key: 'me',    ref: meRef    },
+    ]
+
+    function updateActive() {
+      const isDesktop = window.innerWidth >= 768
+      const containerTop = isDesktop
+        ? (rightPanelRef.current?.getBoundingClientRect().top ?? 0)
+        : 0
+      const threshold = containerTop + window.innerHeight * 0.35
+
+      let active = 'hello'
+      for (const { key, ref } of sections) {
+        if (ref.current && ref.current.getBoundingClientRect().top <= threshold) {
+          active = key
+        }
+      }
+      setActiveNav(active)
+    }
+
+    const panel = rightPanelRef.current
+    panel?.addEventListener('scroll', updateActive, { passive: true })
+    window.addEventListener('scroll', updateActive, { passive: true })
+    return () => {
+      panel?.removeEventListener('scroll', updateActive)
+      window.removeEventListener('scroll', updateActive)
+    }
+  }, [])
 
   function scrollTo(section) {
     setActiveNav(section)
@@ -116,83 +153,89 @@ export default function App() {
 
         {/* ── Work ── */}
         <div ref={workRef} className="work-section">
+          <div className="work-grid">
 
-          {/* Mercury */}
-          <div className="company-block">
-            <div className="company-header">
-              <span className="work-label">✦ work</span>
-              <span className="company-name-role">
-                <span className="company-name">mercury</span>
-                <span className="company-role"> product designer</span>
-              </span>
-              <span className="company-date">jun 2022 – present</span>
-            </div>
-            <div className="company-divider" />
-
-            <div className="company-intro">
-              <p className="intro-text"><strong>Mercury</strong> is a financial technology company building banking infrastructure for startups and businesses.</p>
-              <p className="intro-text">As a product designer on the core product team, I own end-to-end design for accounting and financial operations features — from early discovery through shipped product.</p>
-              <p className="contact-note">For in-depth details of my work, please contact me.</p>
+            {/* Single ✦ work label — left column, top-aligned with first company header */}
+            <div className="work-section-label">
+              <span className="section-label">✦ work</span>
             </div>
 
-            <div className="project-entries">
-              <div className="project-entry">
-                <div className="project-text">
-                  <div className="work-project-title">accounting experience</div>
-                  <p className="project-desc">Redesigned Mercury's core accounting workflows to reduce friction for founders managing their finances. Focused on clarity, speed, and building trust through transparency.</p>
-                  <p className="project-desc">Led research, interaction design, and visual design across web and mobile surfaces.</p>
+            <div className="work-companies">
+
+              {/* Mercury */}
+              <div className="company-block">
+                <div className="company-header-row">
+                  <span>
+                    <span className="company-name">mercury</span>
+                    <span className="company-role"> product designer</span>
+                  </span>
+                  <span className="company-date">jun 2022 - present</span>
                 </div>
-                <div className="project-image" />
-              </div>
-              <div className="project-entry">
-                <div className="project-text">
-                  <div className="work-project-title">accounting integrations</div>
-                  <p className="project-desc">Designed the integrations experience connecting Mercury to QuickBooks, Xero, and other accounting tools used by small business owners.</p>
-                  <p className="project-desc">Worked closely with engineering and partnerships to ship a scalable integration framework.</p>
+
+                <div className="company-intro">
+                  <p className="intro-text"><strong>Mercury</strong> is a startup that revolutionizes business banking* by taking a tedious process and making easy and accessible to founders.</p>
+                  <p className="intro-text">I help founders spend less time wrestling with their books by designing tools that bring clarity and accuracy to accounting right at the source.</p>
+                  <p className="contact-note">For in-depth details of my work, please contact me.</p>
                 </div>
-                <div className="project-image" />
+
+                <div className="project-entries">
+                  <div className="project-entry">
+                    <div className="project-text">
+                      <div className="work-project-title">Accounting automation</div>
+                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
+                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                    </div>
+                    <img src={mercuryAutomation} alt="Accounting automation" className="project-image" />
+                  </div>
+                  <div className="project-entry">
+                    <div className="project-text">
+                      <div className="work-project-title">Accounting foundations</div>
+                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
+                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                    </div>
+                    <img src={mercuryFoundations} alt="Accounting foundations" className="project-image" />
+                  </div>
+                </div>
               </div>
+
+              {/* Rev */}
+              <div className="company-block">
+                <div className="company-header-row">
+                  <span>
+                    <span className="company-name">rev</span>
+                    <span className="company-role"> product designer</span>
+                  </span>
+                  <span className="company-date">jun 2021 - jun 2022</span>
+                </div>
+
+                <div className="company-intro">
+                  <p className="intro-text"><strong>Rev</strong> is a speech-to-text company that provides several services that include transcription, captions, and subtitles, along with utilizing the output of these</p>
+                  <p className="intro-text">I helped helped with updating our design system to compliment our new branding along with and engineers to be able to engage with our API playground.</p>
+                  <p className="contact-note">For in-depth details of my work, please contact me.</p>
+                </div>
+
+                <div className="project-entries">
+                  <div className="project-entry">
+                    <div className="project-text">
+                      <div className="work-project-title">Brand & Design system</div>
+                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
+                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                    </div>
+                    <img src={revDesignSystem} alt="Brand & Design system" className="project-image" />
+                  </div>
+                  <div className="project-entry">
+                    <div className="project-text">
+                      <div className="work-project-title">API Playground</div>
+                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
+                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                    </div>
+                    <img src={revApiPlayground} alt="API Playground" className="project-image" />
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-
-          {/* Rev */}
-          <div className="company-block">
-            <div className="company-header">
-              <span className="work-label">✦ work</span>
-              <span className="company-name-role">
-                <span className="company-name">rev</span>
-                <span className="company-role"> product designer</span>
-              </span>
-              <span className="company-date">2020 – 2022</span>
-            </div>
-            <div className="company-divider" />
-
-            <div className="company-intro">
-              <p className="intro-text"><strong>Rev</strong> is a speech technology company providing transcription, captions, and translation services.</p>
-              <p className="intro-text">Contributed to the consumer and enterprise product experience, focusing on order flows and account management.</p>
-              <p className="contact-note">For in-depth details of my work, please contact me.</p>
-            </div>
-
-            <div className="project-entries">
-              <div className="project-entry">
-                <div className="project-text">
-                  <div className="work-project-title">API playground</div>
-                  <p className="project-desc">Designed an interactive API playground allowing developers to test Rev's transcription API directly in the browser.</p>
-                  <p className="project-desc">Balanced technical depth with accessibility for non-developer users.</p>
-                </div>
-                <div className="project-image" />
-              </div>
-              <div className="project-entry">
-                <div className="project-text">
-                  <div className="work-project-title">order experience</div>
-                  <p className="project-desc">Redesigned the end-to-end order flow for human transcription and captions, reducing drop-off and improving clarity around turnaround times and pricing.</p>
-                  <p className="project-desc">Conducted usability testing and iterated based on customer feedback.</p>
-                </div>
-                <div className="project-image" />
-              </div>
-            </div>
-          </div>
-
         </div>
 
         {/* ── Fun ── */}
