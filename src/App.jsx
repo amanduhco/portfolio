@@ -2,8 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 import BrowserGuy from './BrowserGuy'
 import PotteryWheelAnimation from './PotteryWheelAnimation'
 import amandaPhoto from './assets/amanda-photo.jpeg'
+import mercuryLogo from './assets/mercury-logo-icon.svg'
+import revLogo from './assets/rev.com-31.svg'
+import AmandaLoading from './AmandaLoading'
 import mercuryAutomation   from './assets/accounting-automations.png'
-import mercuryFoundations  from './assets/accounting-foundations.png'
+import mercuryAutomationGif from './assets/accounting-automations-hover.gif'
+import mercuryFoundations    from './assets/accounting-foundations.png'
+import mercuryFoundationsGif from './assets/accounting-foundations.gif'
 import revDesignSystem     from './assets/rev-design-system.png'
 import revApiPlayground    from './assets/rev-ai-playground.png'
 
@@ -115,7 +120,8 @@ export default function App() {
             <div className="section-meta">
               <span className="section-label">✦ Hello</span>
             </div>
-            <div>
+            <div className="hello-content">
+              <div className="hello-bio">
               <p className="bio-text">
                 I'm{' '}
                 <span
@@ -147,6 +153,8 @@ export default function App() {
                 and{' '}
                 <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">Whole Foods Market</a>.
               </p>
+              </div>
+              <AmandaLoading />
             </div>
           </div>
         </section>
@@ -165,7 +173,8 @@ export default function App() {
               {/* Mercury */}
               <div className="company-block">
                 <div className="company-header-row">
-                  <span>
+                  <span className="company-name-row">
+                    <img src={mercuryLogo} alt="Mercury" className="company-logo" />
                     <span className="company-name">mercury</span>
                     <span className="company-role"> product designer</span>
                   </span>
@@ -185,15 +194,21 @@ export default function App() {
                       <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
                       <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
                     </div>
-                    <img src={mercuryAutomation} alt="Accounting automation" className="project-image" />
+                    <div className="project-image-wrapper">
+                      <img src={mercuryAutomation} alt="Accounting automation" className="project-image project-image-static" />
+                      <img src={mercuryAutomationGif} alt="Accounting automation animated" className="project-image project-image-hover" />
+                    </div>
                   </div>
                   <div className="project-entry">
                     <div className="project-text">
                       <div className="work-project-title">Accounting foundations</div>
-                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
-                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                      <p className="project-desc">A core principle at Mercury is to hero the user and in our accounting integration space we wanted to make sure that while we can't always control our 3rd party integrations, we can control giving our user's a space of trust, and confidence. We focused on showcasing ERP errors and letting our user's know when they need to re-authenticate.</p>
+                      <p className="project-desc">This led to an 80% reduction in errors for our users.</p>
                     </div>
-                    <img src={mercuryFoundations} alt="Accounting foundations" className="project-image" />
+                    <div className="project-image-wrapper">
+                      <img src={mercuryFoundations} alt="Accounting foundations" className="project-image project-image-static" />
+                      <img src={mercuryFoundationsGif} alt="Accounting foundations animated" className="project-image project-image-hover" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -201,7 +216,8 @@ export default function App() {
               {/* Rev */}
               <div className="company-block">
                 <div className="company-header-row">
-                  <span>
+                  <span className="company-name-row">
+                    <img src={revLogo} alt="Rev" className="company-logo" />
                     <span className="company-name">rev</span>
                     <span className="company-role"> product designer</span>
                   </span>
