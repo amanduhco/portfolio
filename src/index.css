@@ -111,6 +111,7 @@ body { overscroll-behavior: none; }
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 0 48px;
+  align-items: start;
 }
 
 .section-label {
@@ -155,6 +156,7 @@ body { overscroll-behavior: none; }
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 0 48px;
+  align-items: start;
 }
 
 .work-section-label {
@@ -169,7 +171,7 @@ body { overscroll-behavior: none; }
 .company-header-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 
 .company-name-row {
@@ -179,10 +181,13 @@ body { overscroll-behavior: none; }
 }
 
 .company-logo {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   display: block;
   opacity: 0.5;
+  align-self: center;
+  position: relative;
+  top: -1px;
 }
 
 .company-name {
