@@ -111,11 +111,11 @@ body { overscroll-behavior: none; }
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 0 48px;
-  align-items: start;
+  align-items: baseline;
 }
 
 .section-label {
-  font-size: 13px;
+  font-size: 24px;
   letter-spacing: 0.02em;
 }
 
@@ -127,9 +127,9 @@ body { overscroll-behavior: none; }
 
 .hello-content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 48px;
+  gap: 32px;
 }
 
 .hello-bio {
@@ -156,7 +156,7 @@ body { overscroll-behavior: none; }
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 0 48px;
-  align-items: start;
+  align-items: baseline;
 }
 
 .work-section-label {
@@ -215,7 +215,7 @@ body { overscroll-behavior: none; }
 }
 
 .intro-text {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-text);
   line-height: 1.7;
 }
@@ -263,6 +263,66 @@ body { overscroll-behavior: none; }
 
 .project-desc + .project-desc {
   margin-top: 10px;
+}
+
+.project-image-wrapper {
+  cursor: zoom-in;
+}
+
+/* ════════════════════════════════════════
+   LIGHTBOX
+   ════════════════════════════════════════ */
+.lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  animation: lb-fade-in 0.18s ease;
+}
+
+@keyframes lb-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  background: rgba(255,255,255,0.12);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  z-index: 101;
+}
+.lightbox-close:hover { background: rgba(255,255,255,0.22); }
+
+.lightbox-img {
+  max-width: min(90vw, 1100px);
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  cursor: default;
+  animation: lb-scale-in 0.2s ease;
+}
+
+@keyframes lb-scale-in {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
 }
 
 .project-image-wrapper {

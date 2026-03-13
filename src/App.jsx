@@ -4,13 +4,15 @@ import PotteryWheelAnimation from './PotteryWheelAnimation'
 import amandaPhoto from './assets/amanda-photo.jpeg'
 import mercuryLogo from './assets/mercury-logo-icon.svg'
 import revLogo from './assets/rev.com-31.svg'
-import AmandaLoading from './AmandaLoading'
+import PingAmanda from './PingAmanda'
 import mercuryAutomation   from './assets/accounting-automations.png'
 import mercuryAutomationGif from './assets/accounting-automations-hover.gif'
 import mercuryFoundations    from './assets/accounting-foundations.png'
 import mercuryFoundationsGif from './assets/accounting-foundations.gif'
 import revDesignSystem     from './assets/rev-design-system.png'
+import revDesignSystemGif  from './assets/rev-design-system.gif'
 import revApiPlayground    from './assets/rev-ai-playground.png'
+import revApiPlaygroundGif from './assets/rev-ai-playground.gif'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
@@ -19,6 +21,14 @@ const NAV = ['hello', 'work', 'fun', 'me']
 export default function App() {
   const [activeNav, setActiveNav] = useState('hello')
   const [showPhoto, setShowPhoto] = useState(false)
+  const [lightbox, setLightbox] = useState(null) // { src, alt }
+
+  useEffect(() => {
+    if (!lightbox) return
+    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightbox])
 
   // leftPanelRef doubles as the mobile sticky header for height measurement
   const leftPanelRef = useRef(null)
@@ -154,7 +164,6 @@ export default function App() {
                 <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">Whole Foods Market</a>.
               </p>
               </div>
-              <AmandaLoading />
             </div>
           </div>
         </section>
@@ -183,29 +192,27 @@ export default function App() {
 
                 <div className="company-intro">
                   <p className="intro-text"><strong>Mercury</strong> is a startup that revolutionizes business banking* by taking a tedious process and making easy and accessible to founders.</p>
-                  <p className="intro-text">I help founders spend less time wrestling with their books by designing tools that bring clarity and accuracy to accounting right at the source.</p>
+                  <p className="intro-text">I design tools that give founders clarity and accuracy in their books, catching problems at the source so they stop wrestling with accounting altogether.</p>
                   <p className="contact-note">For in-depth details of my work, please contact me.</p>
                 </div>
 
                 <div className="project-entries">
                   <div className="project-entry">
                     <div className="project-text">
-                      <div className="work-project-title">Accounting automation</div>
-                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
-                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                      <div className="work-project-title">accounting automation</div>
+                      <p className="project-desc">Mercury sits at the origin of every financial transaction, giving it a structural advantage over standalone tools. I led bulk actions first, then automation, then insights across the platform. Bulk actions drove a 41% increase in usage and 67% increase in adoption.</p>
                     </div>
-                    <div className="project-image-wrapper">
+                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: mercuryAutomationGif, alt: 'Accounting automation' })}>
                       <img src={mercuryAutomation} alt="Accounting automation" className="project-image project-image-static" />
                       <img src={mercuryAutomationGif} alt="Accounting automation animated" className="project-image project-image-hover" />
                     </div>
                   </div>
                   <div className="project-entry">
                     <div className="project-text">
-                      <div className="work-project-title">Accounting foundations</div>
-                      <p className="project-desc">A core principle at Mercury is to hero the user and in our accounting integration space we wanted to make sure that while we can't always control our 3rd party integrations, we can control giving our user's a space of trust, and confidence. We focused on showcasing ERP errors and letting our user's know when they need to re-authenticate.</p>
-                      <p className="project-desc">This led to an 80% reduction in errors for our users.</p>
+                      <div className="work-project-title">accounting foundations</div>
+                      <p className="project-desc">Third-party ERP integrations introduced errors outside Mercury's control. I designed error states and re-authentication flows that gave users clarity when things broke. This reduced errors for our users by 80%.</p>
                     </div>
-                    <div className="project-image-wrapper">
+                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: mercuryFoundationsGif, alt: 'Accounting foundations' })}>
                       <img src={mercuryFoundations} alt="Accounting foundations" className="project-image project-image-static" />
                       <img src={mercuryFoundationsGif} alt="Accounting foundations animated" className="project-image project-image-hover" />
                     </div>
@@ -225,27 +232,30 @@ export default function App() {
                 </div>
 
                 <div className="company-intro">
-                  <p className="intro-text"><strong>Rev</strong> is a speech-to-text company that provides several services that include transcription, captions, and subtitles, along with utilizing the output of these</p>
-                  <p className="intro-text">I helped helped with updating our design system to compliment our new branding along with and engineers to be able to engage with our API playground.</p>
+                  <p className="intro-text"><strong>Rev</strong> provides transcription, captions, and subtitles powered by 1000s of hours of transcribed audio. I updated the design system to align with the new brand and built out the API playground for developers to explore Rev's speech-to-text model directly.</p>
                   <p className="contact-note">For in-depth details of my work, please contact me.</p>
                 </div>
 
                 <div className="project-entries">
                   <div className="project-entry">
                     <div className="project-text">
-                      <div className="work-project-title">Brand & Design system</div>
-                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
-                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                      <div className="work-project-title">API playground</div>
+                      <p className="project-desc">Rev had a rare advantage in training data that made their speech-to-text model worth exploring. I designed two entry points: a no-code path for quick experimentation and a code path for developers who wanted direct API access.</p>
                     </div>
-                    <img src={revDesignSystem} alt="Brand & Design system" className="project-image" />
+                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: revApiPlaygroundGif, alt: 'API playground' })}>
+                      <img src={revApiPlayground} alt="API playground" className="project-image project-image-static" />
+                      <img src={revApiPlaygroundGif} alt="API playground animated" className="project-image project-image-hover" />
+                    </div>
                   </div>
                   <div className="project-entry">
                     <div className="project-text">
-                      <div className="work-project-title">API Playground</div>
-                      <p className="project-desc">Mercury already sat at the origin of every financial transaction, giving it a structural advantage over standalone accounting tools. The manual categorization approach wasn't working though, founders lacked the bandwidth, books fell behind, and tax season became chaotic.</p>
-                      <p className="project-desc">The solution rolled out in phases: bulk actions first, then automation, then insights for all users. Bulk actions result was a 41% increase in usage and 67% increase in adoption.</p>
+                      <div className="work-project-title">brand & design system</div>
+                      <p className="project-desc">In 2021, Rev overhauled its logo, colors, and brand messaging. I audited and updated every component in the design system to match the new visual language and tone.</p>
                     </div>
-                    <img src={revApiPlayground} alt="API Playground" className="project-image" />
+                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: revDesignSystemGif, alt: 'Brand & design system' })}>
+                      <img src={revDesignSystem} alt="Brand & design system" className="project-image project-image-static" />
+                      <img src={revDesignSystemGif} alt="Brand & design system animated" className="project-image project-image-hover" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -266,26 +276,34 @@ export default function App() {
             <span className="section-label">✦ me</span>
           </div>
 
-          {/* Center: bio + photo placeholder */}
+          {/* Center: contact card */}
           <div>
-            <p className="bio-text">
-              Designer based in New York. I care a lot about craft —
-              the kind that shows up in the details. When I'm not pushing
-              pixels I'm usually throwing pots, sketching, or overanalyzing
-              type choices nobody else notices.
-            </p>
+            <PingAmanda />
           </div>
 
           {/* Right: date + pottery wheel */}
           <div className="me-right">
-            <span className="me-date">2022 – now</span>
-            <div className="pottery-wrapper">
+<div className="pottery-wrapper">
               <PotteryWheelAnimation />
             </div>
           </div>
         </section>
 
       </main>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div className="lightbox-backdrop" onClick={() => setLightbox(null)}>
+          <button className="lightbox-close" onClick={() => setLightbox(null)} aria-label="Close">✕</button>
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            className="lightbox-img"
+            onClick={e => e.stopPropagation()}
+          />
+        </div>
+      )}
+
     </div>
   )
 }
