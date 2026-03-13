@@ -135,7 +135,7 @@ export default function App() {
         <section ref={helloRef} className="section">
           <div className="section-grid">
             <div className="section-meta">
-              <span className="section-label">✦ Hello</span>
+              <span className="section-label">✦ hello</span>
             </div>
             <div className="hello-content">
               <div className="hello-bio">
