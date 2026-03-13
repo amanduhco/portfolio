@@ -24,10 +24,17 @@ export default function App() {
   const [lightbox, setLightbox] = useState(null) // { src, alt }
 
   useEffect(() => {
-    if (!lightbox) return
+    if (!lightbox) {
+      document.body.style.overflow = ''
+      return
+    }
+    document.body.style.overflow = 'hidden'
     const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
   }, [lightbox])
 
   // leftPanelRef doubles as the mobile sticky header for height measurement
