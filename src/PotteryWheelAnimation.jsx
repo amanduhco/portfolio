@@ -21,14 +21,9 @@ const WAVY_BAND_X = [
   141.72,147.79,177.5,
 ]
 
-// CCW pot-body group delay by X column (wave fires right→left: F first, A last)
+// All pot elements pulse in unison — no horizontal sweep, keeps motion in one vertical plane
 function potDelay(x) {
-  if (x > 162)  return 0    // F: rightEdge
-  if (x >= 132) return 0.3  // E
-  if (x >= 121) return 0.6  // D
-  if (x >= 110) return 0.9  // C
-  if (x >= 80)  return 1.2  // B
-  return 1.5                // A: leftEdge
+  return 0
 }
 
 // Wheel base: 79 paths in SVG order. Each entry: [delay_seconds, is_near_side]
