@@ -1,29 +1,20 @@
 import { useEffect, useRef } from "react";
 
-// ─── Config ────────────────────────────────────────────────────────────────
-// Tweak these values to match what you dialed in with the controls.
-
 const CONFIG = {
-  blobSize: 90,       // radius of the leading blob (px)
-  numTrail: 18,       // number of blobs in the trail
-  shrinkPerStep: 2.5, // how much each blob shrinks (px)
-  leadSmoothing: 0.12,// how quickly the lead follows the cursor (0–1)
-  lagPerStep: 0.022,  // how much extra lag each successive blob gets
-  alpha: 0.32,        // opacity of the leading blob
-  fadePerStep: 0.01,  // how much opacity fades per blob in trail
-
-  // Gradient color stops — edit or add more hex values
+  blobSize: 24,
+  numTrail: 12,
+  shrinkPerStep: 1,
+  leadSmoothing: 0.21,
+  lagPerStep: 0.022,
+  alpha: 0.55,
+  fadePerStep: 0.01,
   colorStops: [
     "#C4622A", // Ember
-    "#C46E4B", // Terracotta
     "#B5706A", // Clay rose
     "#9E6E82", // Dusty mauve
     "#7B6A8A", // Muted violet
-    "#5E6380", // Slate dusk
   ],
 };
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
 
 function hexToRgb(hex) {
   return {
@@ -62,8 +53,6 @@ function buildPoints(config) {
     };
   });
 }
-
-// ─── Hook ───────────────────────────────────────────────────────────────────
 
 function useGradientBlob(canvasRef, config = CONFIG) {
   useEffect(() => {
@@ -126,16 +115,8 @@ function useGradientBlob(canvasRef, config = CONFIG) {
   }, [canvasRef, config]);
 }
 
-// ─── Component ──────────────────────────────────────────────────────────────
-
 /**
- * Drop <GradientBlobCursor /> anywhere in your app — ideally near the root.
- * It renders a fixed, full-screen canvas that sits on top of everything
- * with pointer-events: none so it never blocks clicks.
- *
- * Pass a custom `config` prop to override any of the defaults above.
- *
- * Example usage in your layout / App.jsx:
+ * Usage — add once near the root of your app:
  *
  *   import GradientBlobCursor from "./GradientBlobCursor";
  *
