@@ -588,12 +588,13 @@ body { overscroll-behavior: none; }
    POTTERY WHEEL — keyframes (opacity wave)
    ════════════════════════════════════════ */
 
-/* Pot body / top / wavy band: CCW opacity pulse — lower baseline for more contrast */
+/* Pot surface: sharp bright peak at 0% (the "near face" sweeping past the viewer),
+   quick fall to the per-element cylindrical base opacity, held for the rest of the cycle.
+   Combined with per-element --base (Lambert shading), this reads as a 3D cylinder spinning. */
 @keyframes wavePot {
-  0%   { opacity: 0.3; }
-  15%  { opacity: 1.0; }
-  30%  { opacity: 0.3; }
-  100% { opacity: 0.3; }
+  0%   { opacity: 1.0; }
+  18%  { opacity: var(--base, 0.15); }
+  100% { opacity: var(--base, 0.15); }
 }
 
 /* Wheel base far side (top, receding): dark at rest — goes nearly black when not lit,

@@ -21,9 +21,27 @@ const WAVY_BAND_X = [
   141.72,147.79,177.5,
 ]
 
-// All pot elements pulse in unison — no horizontal sweep, keeps motion in one vertical plane
+// Pot geometry
+const POT_CX   = 122.5  // center X of pot profile in SVG units
+const POT_HW   = 57     // half-width of widest part
+const X_LEFT   = 68     // leftmost X across all pot paths
+const X_RIGHT  = 177    // rightmost X across all pot paths
+const SPIN_DUR = 2.4    // seconds per revolution — matches wheel base
+
+// Lambert shading on a cylinder: full brightness at center (surface normal → viewer),
+// near-zero at edges (surface normal ⊥ viewer). Simulates what ASCII art does with
+// dense chars (@, #) at center and sparse chars (., space) at the tangent edges.
+function cylinderBase(x) {
+  const nx = Math.abs(x - POT_CX) / POT_HW   // 0 at center, ~1 at edges
+  return Math.max(0.06, 0.75 * Math.sqrt(Math.max(0, 1 - nx * nx)))
+}
+
+// Traveling wave right→left (CCW spin viewed from side).
+// Right edge fires first (delay=0), left edge last. Uses 90% of the period so
+// the wave clears before the next cycle restarts, avoiding an overlap blur.
 function potDelay(x) {
-  return 0
+  const frac = (X_RIGHT - x) / (X_RIGHT - X_LEFT)  // 0 at right edge, 1 at left edge
+  return frac * SPIN_DUR * 0.9
 }
 
 // Wheel base: 79 paths in SVG order. Each entry: [delay_seconds, is_near_side]
@@ -69,7 +87,11 @@ const WHEEL_DATA = [
 
 function buildSpinCSS(spinning) {
   if (!spinning) {
-    // At rest: near paths (bottom of disc) slightly lighter, far paths (top) slightly darker
+    // At rest: show cylindrical shading so the pot reads as 3D even when still
+    const potRestRule = (sel, xs) => xs.map((x, i) => {
+      const op = (cylinderBase(x) * 0.85).toFixed(3)
+      return `${sel} path:nth-child(${i+1}){opacity:${op}}`
+    }).join('')
     const nearSelectors = WHEEL_DATA
       .map(([, near], i) => near ? `#wheel-base path:nth-child(${i + 1})` : null)
       .filter(Boolean).join(',')
@@ -77,16 +99,20 @@ function buildSpinCSS(spinning) {
       .map(([, near], i) => !near ? `#wheel-base path:nth-child(${i + 1})` : null)
       .filter(Boolean).join(',')
     return (
-      '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;transition:opacity 0.6s ease}' +
-      `#pot-top path,#pot-body path,#wavy-band path{opacity:0.6}` +
+      '#pot-top path,#pot-body path,#wavy-band path,#wheel-base path{animation:none;transition:opacity 0.4s ease}' +
+      potRestRule('#pot-top',   POT_TOP_X) +
+      potRestRule('#pot-body',  POT_BODY_X) +
+      potRestRule('#wavy-band', WAVY_BAND_X) +
       `${nearSelectors}{opacity:0.5}` +
       `${farSelectors}{opacity:0.22}`
     )
   }
 
-  const potRule = (sel, xs, dur) => xs.map((x, i) => {
-    const d = potDelay(x)
-    return `${sel} path:nth-child(${i+1}){animation:wavePot ${dur}s ease-in-out infinite;animation-delay:${d}s}`
+  // Spinning: per-element --base (cylindrical shading) + traveling wave delay
+  const potRule = (sel, xs) => xs.map((x, i) => {
+    const d    = potDelay(x).toFixed(3)
+    const base = cylinderBase(x).toFixed(3)
+    return `${sel} path:nth-child(${i+1}){--base:${base};animation:wavePot ${SPIN_DUR}s linear infinite;animation-delay:${d}s}`
   }).join('')
 
   const wheelRule = WHEEL_DATA.map(([d, near], i) =>
@@ -94,9 +120,9 @@ function buildSpinCSS(spinning) {
   ).join('')
 
   return (
-    potRule('#pot-top',   POT_TOP_X,   1.8) +
-    potRule('#pot-body',  POT_BODY_X,  1.8) +
-    potRule('#wavy-band', WAVY_BAND_X, 1.4) +
+    potRule('#pot-top',   POT_TOP_X) +
+    potRule('#pot-body',  POT_BODY_X) +
+    potRule('#wavy-band', WAVY_BAND_X) +
     wheelRule
   )
 }
