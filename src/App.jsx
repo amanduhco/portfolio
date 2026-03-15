@@ -163,23 +163,31 @@ export default function App() {
                 Currently @{' '}
                 <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Mercury
-                  <img src="https://api.microlink.io/?url=https%3A%2F%2Fmercury.com&screenshot=true&meta=false&embed=screenshot.url" alt="Mercury homepage" className="company-preview" />
+                  <span className="company-preview-clip">
+                    <img src="https://api.microlink.io/?url=https%3A%2F%2Fmercury.com&screenshot=true&meta=false&embed=screenshot.url" alt="Mercury homepage" className="company-preview" />
+                  </span>
                 </a>.
               </p>
               <p className="bio-text bio-prev">
                 Previously at{' '}
                 <a href="https://rev.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Rev
-                  <img src="https://api.microlink.io/?url=https%3A%2F%2Frev.com&screenshot=true&meta=false&embed=screenshot.url" alt="Rev homepage" className="company-preview" />
+                  <span className="company-preview-clip">
+                    <img src="https://api.microlink.io/?url=https%3A%2F%2Frev.com&screenshot=true&meta=false&embed=screenshot.url" alt="Rev homepage" className="company-preview" />
+                  </span>
                 </a>,{' '}
                 <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Michaels
-                  <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.michaels.com&screenshot=true&meta=false&embed=screenshot.url" alt="Michaels homepage" className="company-preview" />
+                  <span className="company-preview-clip">
+                    <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.michaels.com&screenshot=true&meta=false&embed=screenshot.url" alt="Michaels homepage" className="company-preview" />
+                  </span>
                 </a>,{' '}
                 and{' '}
                 <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Whole Foods Market
-                  <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.wholefoodsmarket.com&screenshot=true&meta=false&embed=screenshot.url" alt="Whole Foods Market homepage" className="company-preview" />
+                  <span className="company-preview-clip">
+                    <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.wholefoodsmarket.com&screenshot=true&meta=false&embed=screenshot.url" alt="Whole Foods Market homepage" className="company-preview" />
+                  </span>
                 </a>.
               </p>
               </div>

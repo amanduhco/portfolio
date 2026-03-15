@@ -628,14 +628,14 @@ body { overscroll-behavior: none; }
 .company-link:visited { color: var(--color-text); }
 .company-link:hover   { text-decoration: underline; }
 
-.company-preview {
+.company-preview-clip {
   position: absolute;
   bottom: calc(100% + 8px);
   left: 0;
+  display: block;
   width: 220px;
   height: 137px;
-  object-fit: cover;
-  object-position: top;
+  overflow: hidden;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   pointer-events: none;
@@ -644,10 +644,16 @@ body { overscroll-behavior: none; }
   transform: translateY(4px);
   transition: opacity 120ms ease-in, transform 120ms ease-in;
 }
-.company-link:hover .company-preview {
+.company-link:hover .company-preview-clip {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 180ms ease-out, transform 180ms ease-out;
+}
+
+.company-preview {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .bio-currently { margin-top: 16px; }
