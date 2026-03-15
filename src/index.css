@@ -633,7 +633,9 @@ body { overscroll-behavior: none; }
   bottom: calc(100% + 8px);
   left: 0;
   width: 220px;
-  height: auto;
+  height: 137px;
+  object-fit: cover;
+  object-position: top;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   pointer-events: none;
