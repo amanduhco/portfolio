@@ -5,6 +5,7 @@ import amandaPhoto from './assets/amanda-photo.jpeg'
 import mercuryLogo from './assets/mercury-logo-icon.svg'
 import revLogo from './assets/rev.com-31.svg'
 import PingAmanda from './PingAmanda'
+import GradientBlobCursor from './GradientBlobCursor'
 import mercuryAutomation   from './assets/accounting-automations.png'
 import mercuryAutomationGif from './assets/accounting-automations-hover.gif'
 import mercuryFoundations    from './assets/accounting-foundations.png'
@@ -101,6 +102,7 @@ export default function App() {
 
   return (
     <div className="portfolio">
+      {!IS_TOUCH && <GradientBlobCursor />}
 
       {/*
        * LEFT PANEL (desktop) / STICKY HEADER (mobile)
