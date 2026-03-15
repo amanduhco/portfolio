@@ -13,6 +13,7 @@ import revDesignSystem     from './assets/rev-design-system.png'
 import revDesignSystemGif  from './assets/rev-design-system.gif'
 import revApiPlayground    from './assets/rev-ai-playground.png'
 import revApiPlaygroundGif from './assets/rev-ai-playground.gif'
+import michaelsScreenshot from './assets/michaels-screenshot.png'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
@@ -179,7 +180,7 @@ export default function App() {
                 <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Michaels
                   <span className="company-preview-clip">
-                    <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.michaels.com&screenshot=true&meta=false&embed=screenshot.url" alt="Michaels homepage" className="company-preview" />
+                    <img src={michaelsScreenshot} alt="Michaels homepage" className="company-preview" />
                   </span>
                 </a>,{' '}
                 and{' '}
