@@ -228,7 +228,7 @@ export default function App() {
                   <div className="project-entry">
                     <div className="project-text">
                       <div className="work-project-title">accounting automation</div>
-                      <p className="project-desc">Mercury sits at the origin of every financial transaction, giving it a structural advantage over standalone tools. I led bulk actions first, then automation, then insights across the platform. Bulk actions drove a 41% increase in usage and 67% increase in adoption.</p>
+                      <p className="project-desc">I led three successive design initiatives across the platform: bulk actions, automation, and insights, each growing in complexity and scope. Bulk actions drove +41% usage and +67% in adoption.</p>
                     </div>
                     <div className="project-image-wrapper" onClick={() => setLightbox({ src: mercuryAutomationGif, alt: 'Accounting automation' })}>
                       <img src={mercuryAutomation} alt="Accounting automation" className="project-image project-image-static" />
