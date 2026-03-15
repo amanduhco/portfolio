@@ -620,11 +620,33 @@ body { overscroll-behavior: none; }
    ════════════════════════════════════════ */
 
 .company-link {
+  position: relative;
+  display: inline-block;
   color: var(--color-text);
   text-decoration: none;
 }
 .company-link:visited { color: var(--color-text); }
 .company-link:hover   { text-decoration: underline; }
+
+.company-preview {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  width: 220px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 120ms ease-in, transform 120ms ease-in;
+}
+.company-link:hover .company-preview {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 180ms ease-out, transform 180ms ease-out;
+}
 
 .bio-currently { margin-top: 16px; }
 .bio-prev      { color: var(--color-muted); }

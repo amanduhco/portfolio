@@ -161,14 +161,26 @@ export default function App() {
               </p>
               <p className="bio-text bio-currently">
                 Currently @{' '}
-                <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="company-link">Mercury</a>.
+                <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                  Mercury
+                  <img src="https://api.microlink.io/?url=https%3A%2F%2Fmercury.com&screenshot=true&meta=false&embed=screenshot.url" alt="Mercury homepage" className="company-preview" />
+                </a>.
               </p>
               <p className="bio-text bio-prev">
                 Previously at{' '}
-                <a href="https://rev.com" target="_blank" rel="noopener noreferrer" className="company-link">Rev</a>,{' '}
-                <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link">Michaels</a>,{' '}
+                <a href="https://rev.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                  Rev
+                  <img src="https://api.microlink.io/?url=https%3A%2F%2Frev.com&screenshot=true&meta=false&embed=screenshot.url" alt="Rev homepage" className="company-preview" />
+                </a>,{' '}
+                <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                  Michaels
+                  <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.michaels.com&screenshot=true&meta=false&embed=screenshot.url" alt="Michaels homepage" className="company-preview" />
+                </a>,{' '}
                 and{' '}
-                <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">Whole Foods Market</a>.
+                <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                  Whole Foods Market
+                  <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.wholefoodsmarket.com&screenshot=true&meta=false&embed=screenshot.url" alt="Whole Foods Market homepage" className="company-preview" />
+                </a>.
               </p>
               </div>
             </div>
