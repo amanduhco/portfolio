@@ -16,7 +16,7 @@ import revApiPlaygroundGif from './assets/rev-ai-playground.gif'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
-const NAV = ['hello', 'work', 'fun', 'me']
+const NAV = ['hello', 'work', 'me']
 
 export default function App() {
   const [activeNav, setActiveNav] = useState('hello')
@@ -271,10 +271,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── Fun ── */}
-        <section ref={funRef} className="placeholder-section">
-          <span className="section-label">✦ fun</span>
-        </section>
+        {/* ── Fun ── (hidden) */}
 
         {/* ── Me ── */}
         <section ref={meRef} className="me-section last-section">
