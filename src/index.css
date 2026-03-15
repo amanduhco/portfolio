@@ -34,8 +34,8 @@ body { overscroll-behavior: none; }
 
 /* Left sidebar */
 .left-panel {
-  width: 268px;
-  min-width: 268px;
+  width: 245px;
+  min-width: 245px;
   flex-shrink: 0;
   height: 100vh;
   position: sticky;
@@ -109,7 +109,7 @@ body { overscroll-behavior: none; }
 
 .section-grid {
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 245px 1fr;
   gap: 0 48px;
   align-items: baseline;
 }
@@ -151,10 +151,10 @@ body { overscroll-behavior: none; }
   padding: 80px 48px 160px;
 }
 
-/* Two-column layout: 180px label | content */
+/* Two-column layout: 245px label | content */
 .work-grid {
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 245px 1fr;
   gap: 0 48px;
   align-items: baseline;
 }
@@ -507,7 +507,7 @@ body { overscroll-behavior: none; }
    ════════════════════════════════════════ */
 .me-section {
   display: grid;
-  grid-template-columns: 180px 1fr 220px;
+  grid-template-columns: 245px 1fr 245px;
   gap: 0 48px;
   padding: 80px 48px 0;
   min-height: 480px;
