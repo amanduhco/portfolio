@@ -196,13 +196,13 @@ body { overscroll-behavior: none; }
 }
 
 .company-role {
-  font-size: 15px;
+  font-size: 24px;
   font-weight: 300;
   color: var(--color-muted);
 }
 
 .company-date {
-  font-size: 13px;
+  font-size: 24px;
   color: var(--color-muted);
   white-space: nowrap;
 }
