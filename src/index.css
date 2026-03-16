@@ -190,7 +190,7 @@ body { overscroll-behavior: none; }
 }
 
 .company-name {
-  font-size: 19px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--color-text);
 }
