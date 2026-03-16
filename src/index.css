@@ -115,7 +115,7 @@ body { overscroll-behavior: none; }
 }
 
 .section-label {
-  font-size: 24px;
+  font-size: 19px;
   letter-spacing: 0.02em;
 }
 
@@ -138,7 +138,7 @@ body { overscroll-behavior: none; }
 }
 
 .bio-text {
-  font-size: 24px;
+  font-size: 19px;
   line-height: 1.7;
 }
 
@@ -190,7 +190,7 @@ body { overscroll-behavior: none; }
 }
 
 .company-name {
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--color-text);
 }
@@ -248,7 +248,7 @@ body { overscroll-behavior: none; }
 }
 
 .work-project-title {
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 500;
   color: var(--color-text);
   margin-bottom: 8px;
@@ -256,7 +256,7 @@ body { overscroll-behavior: none; }
 
 .project-desc {
   font-size: 15px;
-  color: #666666;
+  color: #333333;
   line-height: 1.65;
 }
 
@@ -450,7 +450,7 @@ body { overscroll-behavior: none; }
   }
 
   .bio-text {
-    font-size: 16px;
+    font-size: 17px;
     max-width: 100%;
   }
 
