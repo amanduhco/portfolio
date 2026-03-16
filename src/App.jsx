@@ -268,7 +268,7 @@ export default function App() {
                 </div>
 
                 <div className="company-intro">
-                  <p className="intro-text"><strong>Rev</strong> provides transcription, captions, and subtitles powered by 1000s of hours of transcribed audio. I updated the design system to align with the new brand and built out the API playground for developers to explore Rev's speech-to-text model directly.</p>
+                  <p className="intro-text"><strong>Rev</strong> provides transcription, captions, and subtitles powered by 100,000s of hours of transcribed audio. I updated the design system to align with the new brand and built out the API playground for developers to explore Rev's AI/ML speech-to-text model directly.</p>
                   <p className="contact-note">For in-depth details of my work, please contact me.</p>
                 </div>
 
