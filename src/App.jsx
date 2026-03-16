@@ -15,6 +15,7 @@ import revDesignSystemGif  from './assets/rev-design-system.gif'
 import revApiPlayground    from './assets/rev-ai-playground.png'
 import revApiPlaygroundGif from './assets/rev-ai-playground.gif'
 import michaelsScreenshot from './assets/michaels-screenshot.png'
+import amandaCoffee from './assets/amanda-coffee.svg'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
@@ -321,6 +322,12 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {/* ── Footer ── */}
+        <div className="site-footer">
+          Site created with cursor, claude code, and a lot of coffee.
+          <img src={amandaCoffee} alt="" className="footer-coffee" />
+        </div>
 
       </main>
 
