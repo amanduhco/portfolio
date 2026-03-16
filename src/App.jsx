@@ -194,6 +194,12 @@ export default function App() {
                 </a>.
               </p>
               </div>
+              <button className="cta-btn" onClick={() => scrollTo('me')}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M7 2v10M7 12L2.5 7.5M7 12l4.5-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Get in touch
+              </button>
             </div>
           </div>
         </section>
