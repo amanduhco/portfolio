@@ -6,40 +6,59 @@ import mercuryLogo from './assets/mercury-logo-icon.svg'
 import revLogo from './assets/rev.com-31.svg'
 import PingAmanda from './PingAmanda'
 import GradientBlobCursor from './GradientBlobCursor'
-import mercuryAutomation   from './assets/accounting-automations.png'
+import mercuryAutomation    from './assets/accounting-automations-1200x900.png'
 import mercuryAutomationGif from './assets/accounting-automations-hover.gif'
-import mercuryFoundations    from './assets/accounting-foundations.png'
+import mercuryFoundations    from './assets/accounting-foundations-1200x900.png'
 import mercuryFoundationsGif from './assets/accounting-foundations.gif'
-import revDesignSystem     from './assets/rev-design-system.png'
-import revDesignSystemGif  from './assets/rev-design-system.gif'
-import revApiPlayground    from './assets/rev-ai-playground.png'
-import revApiPlaygroundGif from './assets/rev-ai-playground.gif'
+import revDesignSystem       from './assets/rev-design-system-1200x900.png'
+import revDesignSystemGif    from './assets/rev-design-system.gif'
+import revApiPlayground      from './assets/rev-ai-playground-1200x900.png'
+import revApiPlaygroundGif   from './assets/rev-ai-playground.gif'
 import michaelsScreenshot from './assets/michaels-screenshot.png'
 import amandaCoffee from './assets/amanda-coffee.svg'
+import FeatureShowcase from './FeatureShowcase'
 
 const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
+
+const MERCURY_ITEMS = [
+  {
+    title: 'accounting automation',
+    description: 'I led three successive design initiatives across the platform: bulk actions, automation, and insights, each growing in complexity and scope. Bulk actions drove +41% usage and +67% in adoption.',
+    staticSrc: mercuryAutomation,
+    hoverSrc:  mercuryAutomationGif,
+    alt: 'Accounting automation',
+  },
+  {
+    title: 'accounting foundations',
+    description: "Third-party ERP integrations introduced errors outside Mercury's control. I designed error states and re-authentication flows that gave users clarity when things broke. This reduced errors for our users by 80%.",
+    staticSrc: mercuryFoundations,
+    hoverSrc:  mercuryFoundationsGif,
+    alt: 'Accounting foundations',
+  },
+]
+
+const REV_ITEMS = [
+  {
+    title: 'API playground',
+    description: "Rev had a rare advantage in training data that made their speech-to-text model worth exploring. I designed two entry points: a no-code path for quick experimentation and a code path for developers who wanted direct API access.",
+    staticSrc: revApiPlayground,
+    hoverSrc:  revApiPlaygroundGif,
+    alt: 'API playground',
+  },
+  {
+    title: 'brand & design system',
+    description: "In 2021, Rev overhauled its logo, colors, and brand messaging. I audited and updated every component in the design system to match the new visual language and tone.",
+    staticSrc: revDesignSystem,
+    hoverSrc:  revDesignSystemGif,
+    alt: 'Brand & design system',
+  },
+]
 
 const NAV = ['hello', 'work', 'me']
 
 export default function App() {
   const [activeNav, setActiveNav] = useState('hello')
   const [showPhoto, setShowPhoto] = useState(false)
-  const [lightbox, setLightbox] = useState(null) // { src, alt }
-
-  useEffect(() => {
-    if (!lightbox) {
-      document.body.style.overflow = ''
-      return
-    }
-    document.body.style.overflow = 'hidden'
-    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
-    window.addEventListener('keydown', onKey)
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [lightbox])
-
   // leftPanelRef doubles as the mobile sticky header for height measurement
   const leftPanelRef = useRef(null)
   const rightPanelRef = useRef(null)
@@ -233,28 +252,7 @@ export default function App() {
                   <p className="contact-note">For in-depth details of my work, please contact me.</p>
                 </div>
 
-                <div className="project-entries">
-                  <div className="project-entry">
-                    <div className="project-text">
-                      <div className="work-project-title">accounting automation</div>
-                      <p className="project-desc">I led three successive design initiatives across the platform: bulk actions, automation, and insights, each growing in complexity and scope. Bulk actions drove +41% usage and +67% in adoption.</p>
-                    </div>
-                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: mercuryAutomationGif, alt: 'Accounting automation' })}>
-                      <img src={mercuryAutomation} alt="Accounting automation" className="project-image project-image-static" />
-                      <img src={mercuryAutomationGif} alt="Accounting automation animated" className="project-image project-image-hover" />
-                    </div>
-                  </div>
-                  <div className="project-entry">
-                    <div className="project-text">
-                      <div className="work-project-title">accounting foundations</div>
-                      <p className="project-desc">Third-party ERP integrations introduced errors outside Mercury's control. I designed error states and re-authentication flows that gave users clarity when things broke. This reduced errors for our users by 80%.</p>
-                    </div>
-                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: mercuryFoundationsGif, alt: 'Accounting foundations' })}>
-                      <img src={mercuryFoundations} alt="Accounting foundations" className="project-image project-image-static" />
-                      <img src={mercuryFoundationsGif} alt="Accounting foundations animated" className="project-image project-image-hover" />
-                    </div>
-                  </div>
-                </div>
+                <FeatureShowcase items={MERCURY_ITEMS} id="mercury" />
               </div>
 
               {/* Rev */}
@@ -273,28 +271,7 @@ export default function App() {
                   <p className="contact-note">For in-depth details of my work, please contact me.</p>
                 </div>
 
-                <div className="project-entries">
-                  <div className="project-entry">
-                    <div className="project-text">
-                      <div className="work-project-title">API playground</div>
-                      <p className="project-desc">Rev had a rare advantage in training data that made their speech-to-text model worth exploring. I designed two entry points: a no-code path for quick experimentation and a code path for developers who wanted direct API access.</p>
-                    </div>
-                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: revApiPlaygroundGif, alt: 'API playground' })}>
-                      <img src={revApiPlayground} alt="API playground" className="project-image project-image-static" />
-                      <img src={revApiPlaygroundGif} alt="API playground animated" className="project-image project-image-hover" />
-                    </div>
-                  </div>
-                  <div className="project-entry">
-                    <div className="project-text">
-                      <div className="work-project-title">brand & design system</div>
-                      <p className="project-desc">In 2021, Rev overhauled its logo, colors, and brand messaging. I audited and updated every component in the design system to match the new visual language and tone.</p>
-                    </div>
-                    <div className="project-image-wrapper" onClick={() => setLightbox({ src: revDesignSystemGif, alt: 'Brand & design system' })}>
-                      <img src={revDesignSystem} alt="Brand & design system" className="project-image project-image-static" />
-                      <img src={revDesignSystemGif} alt="Brand & design system animated" className="project-image project-image-hover" />
-                    </div>
-                  </div>
-                </div>
+                <FeatureShowcase items={REV_ITEMS} id="rev" />
               </div>
 
             </div>
@@ -330,19 +307,6 @@ export default function App() {
         </div>
 
       </main>
-
-      {/* Lightbox */}
-      {lightbox && (
-        <div className="lightbox-backdrop" onClick={() => setLightbox(null)}>
-          <button className="lightbox-close" onClick={() => setLightbox(null)} aria-label="Close">✕</button>
-          <img
-            src={lightbox.src}
-            alt={lightbox.alt}
-            className="lightbox-img"
-            onClick={e => e.stopPropagation()}
-          />
-        </div>
-      )}
 
     </div>
   )

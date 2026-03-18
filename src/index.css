@@ -138,7 +138,7 @@ body { overscroll-behavior: none; }
 }
 
 .bio-text {
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.7;
 }
 
@@ -208,13 +208,12 @@ body { overscroll-behavior: none; }
 }
 
 .company-intro {
-  max-width: 500px;
   padding-top: 60px;
   margin-bottom: 80px;
 }
 
 .intro-text {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--color-text);
   line-height: 1.7;
 }
@@ -229,7 +228,7 @@ body { overscroll-behavior: none; }
 
 .contact-note {
   font-size: 13px;
-  color: var(--color-muted);
+  color: var(--color-text);
   font-style: italic;
   margin-top: 8px;
 }
@@ -266,6 +265,202 @@ body { overscroll-behavior: none; }
 
 .project-image-wrapper {
   cursor: zoom-in;
+}
+
+/* ════════════════════════════════════════
+   FEATURE SHOWCASE
+   ════════════════════════════════════════ */
+
+.fs {
+  margin-bottom: 80px;
+  /* NO overflow:hidden — would break position:sticky on children */
+}
+
+/* 12-col grid — sticky overlay and cards share the same row */
+.fs-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 24px;
+  position: relative;
+}
+
+/* Left text column — cols 1–4, sits beside the cards */
+.fs-sticky-col {
+  grid-column: 1 / 5;
+  grid-row: 1;
+  z-index: 10;
+  padding-right: 16px;
+}
+
+/* Sticky panel — locks at 50vh inside .right-panel */
+.fs-sticky-panel {
+  position: sticky;
+  top: 50vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: transparent;
+  padding: 0;
+  /* No CSS transitions — all state changes are via gsap.set() */
+}
+
+/* ── Counter ── */
+.fs-counter-row {
+  position: relative;
+  height: 0;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.fs-counter-clip {
+  position: absolute;
+  bottom: 4px;
+  right: 0;
+  width: 20px;
+  height: 14px;
+  overflow: clip;   /* spec: overflow:clip not hidden */
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.fs-counter-inner {
+  display: flex;
+  flex-direction: column;
+  /* GSAP sets translateY(-N*100%) — no CSS transition */
+}
+
+.fs-counter-num {
+  display: block;
+  width: 20px;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 14px;
+}
+
+.fs-counter-total {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  width: 20px;
+  text-align: center;
+  color: #ccc;
+  line-height: 14px;
+}
+
+/* ── Titles — all stacked via CSS grid, GSAP controls opacity + y ── */
+.fs-title-wrapper {
+  /* no order tricks needed — title sits naturally at top of flex panel */
+}
+
+.fs-title-container {
+  display: grid;       /* stack all children in the same cell */
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+
+.fs-title-item {
+  grid-area: 1 / 1;   /* all stack in cell 1,1 */
+  opacity: 0;         /* GSAP overrides — prevents flash before init */
+  /* NO CSS transition — all state changes are via GSAP */
+}
+
+/* ── Descriptions — all stacked via CSS grid, GSAP controls opacity ── */
+.fs-desc-wrapper {
+  /* gap from flex parent handles spacing */
+}
+
+.fs-desc-container {
+  display: grid;
+  font-size: 17px;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.fs-desc-item {
+  grid-area: 1 / 1;
+  display: block;
+  opacity: 0;         /* GSAP overrides — prevents flash before init */
+  /* NO CSS transition — all state changes are via GSAP */
+}
+
+/* ── Cards — columns 5–12, same grid row as overlay ── */
+.fs-cards {
+  grid-column: 5 / -1;
+  grid-row: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 60px;
+}
+
+.fs-card {
+  border-radius: 10px;
+}
+
+.fs-card-mobile-text {
+  display: none;
+}
+
+.fs-card-img {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--color-border);
+}
+
+.fs-img-static,
+.fs-img-hover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.25s ease; /* hover GIF fade is fine with CSS transition */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* ── Mobile (< 768px) ── */
+@media (max-width: 767px) {
+  .fs-grid {
+    display: block;
+  }
+
+  /* Hide the sticky text panel on mobile — text renders below each card instead */
+  .fs-sticky-col {
+    display: none;
+  }
+
+  .fs-cards {
+    gap: 40px;
+    padding-bottom: 40px;
+  }
+
+  .fs-card-mobile-text {
+    display: block;
+    padding-top: 16px;
+  }
+
+  .fs-card-mobile-title {
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 8px;
+  }
+
+  .fs-card-mobile-desc {
+    font-size: 15px;
+    color: var(--color-text);
+    line-height: 1.7;
+    margin: 0;
+  }
 }
 
 /* ════════════════════════════════════════
@@ -442,6 +637,7 @@ body { overscroll-behavior: none; }
 
   /* Hide desktop-only elements */
   .designer-bar { display: none; }
+  .company-role { display: none; }
 
   /* Sections */
   .section {
@@ -705,7 +901,7 @@ body { overscroll-behavior: none; }
 .cta-btn:active { transform: scale(0.97); }
 
 .bio-currently { margin-top: 16px; }
-.bio-prev      { color: var(--color-muted); }
+.bio-prev      { color: var(--color-text); }
 
 .amanda-hover {
   position: relative;
