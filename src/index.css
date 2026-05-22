@@ -58,6 +58,7 @@ body { overscroll-behavior: none; }
 
 .panel-name {
   font-size: 14px;
+  font-weight: normal;
   letter-spacing: 0.01em;
 }
 
@@ -118,6 +119,7 @@ body { overscroll-behavior: none; }
 
 .section-label {
   font-size: 19px;
+  font-weight: normal;
   letter-spacing: 0.02em;
 }
 
