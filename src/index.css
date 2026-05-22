@@ -181,6 +181,7 @@ body { overscroll-behavior: none; }
   display: flex;
   align-items: center;
   gap: 6px;
+  line-height: 1;
 }
 
 .company-logo {
