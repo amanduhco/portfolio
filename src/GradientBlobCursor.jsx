@@ -251,6 +251,7 @@ export default function GradientBlobCursor({ config = CONFIG }) {
   return (
     <canvas
       ref={canvasRef}
+      aria-hidden="true"
       style={{
         position: "fixed",
         inset: 0,

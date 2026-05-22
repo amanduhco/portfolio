@@ -247,6 +247,7 @@ function ActivityCanvas({ sceneIdx }) {
   const canvasRef = useRef(null);
   const rafRef    = useRef(null);
   const frameRef  = useRef(0);
+  const visibleRef = useRef(false);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
@@ -255,13 +256,25 @@ function ActivityCanvas({ sceneIdx }) {
 
   useEffect(() => {
     const go = () => {
-      frameRef.current++;
-      const s = 1 + Math.sin(frameRef.current * 0.08) * 0.025;
-      if (canvasRef.current) canvasRef.current.style.transform = `scale(${s})`;
+      if (visibleRef.current) {
+        frameRef.current++;
+        const s = 1 + Math.sin(frameRef.current * 0.08) * 0.025;
+        if (canvasRef.current) canvasRef.current.style.transform = `scale(${s})`;
+      }
       rafRef.current = requestAnimationFrame(go);
     };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => { visibleRef.current = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    if (canvasRef.current) observer.observe(canvasRef.current);
+
     rafRef.current = requestAnimationFrame(go);
-    return () => cancelAnimationFrame(rafRef.current);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -396,209 +409,99 @@ export default function ContactAmanda() {
   const currentScene = scenes[sceneIdx];
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+    <div className="ca-card">
 
-        @keyframes ca-blink { 0%,100%{opacity:0} 50%{opacity:1} }
+      {/* ── TOP: content area ── */}
+      <div className={`ca-content-area${phase === 'idle' ? ' ca-content-area--center' : ''}`}>
 
-        .ca-c1 { animation: ca-blink 1.1s step-start infinite; }
-        .ca-c2 { animation: ca-blink 1.1s step-start infinite .18s; }
-        .ca-c3 { animation: ca-blink 1.1s step-start infinite .36s; }
+        {/* IDLE STATE */}
+        {phase === 'idle' && (
+          <div className="ca-idle">
+            <span className="ca-idle-label">contact</span>
+            <span className="ca-idle-name">Amanda</span>
+            <span className="ca-idle-location">San Francisco, CA</span>
+          </div>
+        )}
 
-        .ca-card {
-          font-family: 'Share Tech Mono', monospace;
-          background: #F2F2F2;
-          border: 1px solid #e0e0e0;
-          border-radius: 20px;
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          max-width: 480px;
-          min-width: 0;
-          position: relative;
-          box-sizing: border-box;
-          overflow: hidden;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        }
+        {/* LOADING STATE */}
+        {phase === 'loading' && (
+          <div className={`ca-fade${contentVisible ? ' ca-fade--visible' : ''}`}>
+            <LoadingLine
+              sceneIdx={sceneIdx}
+              sceneLabel={currentScene.label}
+              elapsed={elapsed}
+            />
+          </div>
+        )}
 
-        .ca-icon-row {
-          display:flex; align-items:center; gap:10px;
-          text-decoration:none; padding:4px 0;
-          transition: opacity .15s;
-        }
-        .ca-icon-row:hover { opacity:.55; }
+        {/* CONTACT STATE */}
+        {phase === 'contact' && (
+          <div className={`ca-fade ca-contact-list${contentVisible ? ' ca-fade--visible' : ''}`}>
+            {contacts.map((c, i) => (
+              <a
+                key={c.id}
+                href={c.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ca-icon-row"
+                style={{
+                  opacity: iconVisible[i] ? 1 : 0,
+                  transform: iconVisible[i] ? 'translateY(0)' : 'translateY(6px)',
+                  transition: `opacity .3s ease ${i * 0.13}s, transform .3s ease ${i * 0.13}s`,
+                }}
+              >
+                <PixelIcon pixels={c.pixels} size={24} />
+                <span className="ca-icon-label">{c.label}</span>
+              </a>
+            ))}
+            <button className="ca-again" onClick={handleReset}>↩ ask again</button>
+          </div>
+        )}
 
-        .ca-send-btn {
-          width: 32px; height: 32px;
-          border-radius: 50%;
-          background: #2a2a2a;
-          border: none;
-          cursor: pointer;
-          display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0;
-          transition: background .15s, transform .1s;
-        }
-        .ca-send-btn:hover  { background: #111; }
-        .ca-send-btn:active { transform: scale(.93); }
-        .ca-send-btn:disabled {
-          background: #d8d8d8;
-          cursor: default;
-        }
+      </div>
 
-        .ca-again {
-          font-family: 'Share Tech Mono', monospace;
-          font-size: 9px; color: #828282;
-          background: none; border: none;
-          cursor: pointer; letter-spacing: .1em;
-          text-transform: uppercase; padding: 0;
-          transition: color .15s; display: inline-block; margin-top: 10px;
-        }
-        .ca-again:hover { color: #333; }
-      `}</style>
+      {/* ── DIVIDER ── */}
+      <div className="ca-divider" />
 
-      <div className="ca-card">
+      {/* ── BOTTOM: full-width prompt bar ── */}
+      <div className="ca-prompt-bar">
 
-        {/* ── TOP: content area ── */}
-        <div style={{
-          minHeight: 120,
-          padding: '20px 20px 16px',
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: phase === 'idle' ? 'center' : 'flex-start',
-          gap: 0,
-        }}>
-
-          {/* IDLE STATE */}
-          {phase === 'idle' && (
-            <div style={{ display:'flex', flexDirection:'column', gap:3 }}>
-              <span style={{ fontSize:9, color:'#828282', letterSpacing:'0.16em', textTransform:'uppercase' }}>contact</span>
-              <span style={{
-                fontSize:22, color:'#1a1a1a', letterSpacing:'-0.02em', lineHeight:1.1,
-                fontFamily:'system-ui, sans-serif', fontWeight:500,
-              }}>Amanda</span>
-              <span style={{ fontSize:9, color:'#828282', letterSpacing:'0.05em', marginTop:2 }}>San Francisco, CA</span>
-            </div>
-          )}
-
-          {/* LOADING STATE — Claude Code style */}
-          {phase === 'loading' && (
-            <div style={{
-              opacity: contentVisible ? 1 : 0,
-              transform: contentVisible ? 'translateY(0)' : 'translateY(4px)',
-              transition: 'opacity .2s ease, transform .2s ease',
-            }}>
-              <LoadingLine
-                sceneIdx={sceneIdx}
-                sceneLabel={currentScene.label}
-                elapsed={elapsed}
-              />
-            </div>
-          )}
-
-          {/* CONTACT STATE */}
-          {phase === 'contact' && (
-            <div style={{
-              opacity: contentVisible ? 1 : 0,
-              transform: contentVisible ? 'translateY(0)' : 'translateY(4px)',
-              transition: 'opacity .2s ease, transform .2s ease',
-              display: 'flex', flexDirection: 'column',
-            }}>
-              {contacts.map((c, i) => (
-                <a
-                  key={c.id}
-                  href={c.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ca-icon-row"
-                  style={{
-                    opacity: iconVisible[i] ? 1 : 0,
-                    transform: iconVisible[i] ? 'translateY(0)' : 'translateY(6px)',
-                    transition: `opacity .3s ease ${i*.13}s, transform .3s ease ${i*.13}s`,
-                  }}
-                >
-                  <PixelIcon pixels={c.pixels} size={24} />
-                  <span style={{ fontSize:11, color:'#444', letterSpacing:'0.02em', whiteSpace:'nowrap' }}>
-                    {c.label}
-                  </span>
-                </a>
-              ))}
-              <button className="ca-again" onClick={handleReset}>↩ ask again</button>
-            </div>
-          )}
-
+        {/* Input row */}
+        <div className="ca-input-row">
+          <span className="ca-input-text">
+            {phase === 'idle'
+              ? 'how do I reach Amanda?'
+              : phase === 'loading'
+              ? 'searching for Amanda…'
+              : 'found her ✓'}
+          </span>
+          <button className="ca-send-btn" onClick={handleSend} disabled={phase !== 'idle'}>
+            <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
+              <path d="M6 10V2M6 2L2.5 5.5M6 2L9.5 5.5" stroke="#F2F2F2" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
 
-        {/* ── DIVIDER ── */}
-        <div style={{ height:1, background:'#e8e8e8', margin:'0 0' }} />
-
-        {/* ── BOTTOM: full-width prompt bar ── */}
-        <div style={{
-          padding: '10px 12px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 8,
-          boxSizing: 'border-box',
-          background: '#ffffff',
-          borderRadius: '0 0 20px 20px',
-        }}>
-
-          {/* Input row */}
-          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-            <span style={{
-              flex:1, fontSize:13, color:'#333333',
-              fontFamily:'system-ui, sans-serif',
-              letterSpacing:'0.01em',
-              padding: '4px 2px',
-            }}>
-              {phase === 'idle'
-                ? 'how do I reach Amanda?'
-                : phase === 'loading'
-                ? 'searching for Amanda…'
-                : 'found her ✓'}
-            </span>
-            <button className="ca-send-btn" onClick={handleSend} disabled={phase !== 'idle'}>
-              <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
-                <path d="M6 10V2M6 2L2.5 5.5M6 2L9.5 5.5" stroke="#F2F2F2" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+        {/* Action chips */}
+        <div className="ca-chips">
+          {[
+            { icon:'📷', label:'instagram' },
+            { icon:'💼', label:'linkedin'  },
+            { icon:'✉️', label:'email'     },
+          ].map(chip => (
+            <button
+              key={chip.label}
+              className="ca-chip"
+              onClick={phase === 'idle' ? handleSend : undefined}
+              disabled={phase !== 'idle'}
+            >
+              {chip.icon} {chip.label}
             </button>
-          </div>
-
-          {/* Action chips */}
-          <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-            {[
-              { icon:'📷', label:'instagram' },
-              { icon:'💼', label:'linkedin'  },
-              { icon:'✉️', label:'email'     },
-            ].map(chip => (
-              <button
-                key={chip.label}
-                onClick={phase === 'idle' ? handleSend : undefined}
-                style={{
-                  display:'inline-flex', alignItems:'center', gap:5,
-                  fontSize:10, color:'#828282',
-                  background:'#f4f4f4', border:'1px solid #e8e8e8',
-                  borderRadius:20, padding:'4px 10px',
-                  cursor: phase === 'idle' ? 'pointer' : 'default',
-                  fontFamily:"'Share Tech Mono', monospace",
-                  letterSpacing:'0.04em',
-                  transition:'background .12s, color .12s',
-                  outline:'none',
-                  opacity: phase !== 'idle' ? 0.5 : 1,
-                }}
-                onMouseEnter={e => { if(phase==='idle') { e.target.style.background='#ececec'; e.target.style.color='#333'; }}}
-                onMouseLeave={e => { e.target.style.background='#f4f4f4'; e.target.style.color='#828282'; }}
-              >
-                <span style={{fontSize:10}}>{chip.icon}</span>
-                {chip.label}
-              </button>
-            ))}
-          </div>
-
+          ))}
         </div>
 
       </div>
-    </>
+
+    </div>
   );
 }

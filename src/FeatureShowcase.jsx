@@ -1,19 +1,38 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // ── Per-card component: hover GIF + lightbox ──────────────────────────────
 function FeatureCard({ item, index, total, itemRef }) {
   const [hovered, setHovered] = useState(false)
+  const [gifSrc, setGifSrc] = useState(null)
   const [lightbox, setLightbox] = useState(false)
+  const closeBtnRef = useRef(null)
+  const triggerRef = useRef(null)
+
+  function openLightbox() {
+    triggerRef.current = document.activeElement
+    setLightbox(true)
+  }
+
+  function closeLightbox() {
+    setLightbox(false)
+    triggerRef.current?.focus()
+  }
 
   useEffect(() => {
     if (!lightbox) { document.body.style.overflow = ''; return }
     document.body.style.overflow = 'hidden'
-    const onKey = (e) => { if (e.key === 'Escape') setLightbox(false) }
+    closeBtnRef.current?.focus()
+    const onKey = (e) => { if (e.key === 'Escape') closeLightbox() }
     window.addEventListener('keydown', onKey)
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
   }, [lightbox])
+
+  function handleMouseEnter() {
+    setHovered(true)
+    if (!gifSrc && item.hoverSrc) setGifSrc(item.hoverSrc)
+  }
 
   return (
     <>
@@ -21,15 +40,15 @@ function FeatureCard({ item, index, total, itemRef }) {
         ref={itemRef}
         className="fs-card"
         aria-label={`${index + 1} of ${total}: ${item.title}`}
-        onMouseEnter={() => setHovered(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setHovered(false)}
-        onClick={() => setLightbox(true)}
+        onClick={openLightbox}
         style={{ cursor: 'zoom-in' }}
       >
         <div className="fs-card-img">
-          <img src={item.staticSrc} alt={item.alt} className="fs-img-static" style={{ opacity: hovered ? 0 : 1 }} />
-          {item.hoverSrc && (
-            <img src={item.hoverSrc} alt="" className="fs-img-hover" style={{ opacity: hovered ? 1 : 0 }} />
+          <img src={item.staticSrc} alt={item.alt} className="fs-img-static" loading="lazy" style={{ opacity: hovered ? 0 : 1 }} />
+          {gifSrc && (
+            <img src={gifSrc} alt="" className="fs-img-hover" style={{ opacity: hovered ? 1 : 0 }} />
           )}
         </div>
         <div className="fs-card-mobile-text">
@@ -39,8 +58,19 @@ function FeatureCard({ item, index, total, itemRef }) {
       </li>
 
       {lightbox && (
-        <div className="lightbox-backdrop" onClick={() => setLightbox(false)}>
-          <button className="lightbox-close" onClick={() => setLightbox(false)} aria-label="Close">✕</button>
+        <div
+          className="lightbox-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label={item.alt}
+          onClick={closeLightbox}
+        >
+          <button
+            ref={closeBtnRef}
+            className="lightbox-close"
+            onClick={closeLightbox}
+            aria-label="Close lightbox"
+          >✕</button>
           <img
             src={item.hoverSrc || item.staticSrc}
             alt={item.alt}

@@ -1,11 +1,10 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import BrowserGuy from './BrowserGuy'
 import PotteryWheelAnimation from './PotteryWheelAnimation'
 import amandaPhoto from './assets/amanda-photo.jpeg'
 import mercuryLogo from './assets/mercury-logo-icon.svg'
 import revLogo from './assets/rev.com-31.svg'
 import PingAmanda from './PingAmanda'
-import GradientBlobCursor from './GradientBlobCursor'
 import mercuryAutomation    from './assets/accounting-automations-1200x900.png'
 import mercuryAutomationGif from './assets/accounting-automations-hover.gif'
 import mercuryFoundations    from './assets/accounting-foundations-1200x900.png'
@@ -15,10 +14,11 @@ import revDesignSystemGif    from './assets/rev-design-system.gif'
 import revApiPlayground      from './assets/rev-ai-playground-1200x900.png'
 import revApiPlaygroundGif   from './assets/rev-ai-playground.gif'
 import michaelsScreenshot from './assets/michaels-screenshot.png'
+import previewMercury from './assets/preview-mercury.jpg'
+import previewRev from './assets/preview-rev.jpg'
+import previewWholefoods from './assets/preview-wholefoods.jpg'
 import amandaCoffee from './assets/amanda-coffee.svg'
 import FeatureShowcase from './FeatureShowcase'
-
-const IS_TOUCH = typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth < 768)
 
 const MERCURY_ITEMS = [
   {
@@ -56,7 +56,21 @@ const REV_ITEMS = [
 
 const NAV = ['hello', 'work', 'me']
 
+function useIsTouch() {
+  const [isTouch, setIsTouch] = useState(
+    () => 'ontouchstart' in window || window.innerWidth < 768
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const update = (e) => setIsTouch(e.matches || 'ontouchstart' in window)
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+  return isTouch
+}
+
 export default function App() {
+  const IS_TOUCH = useIsTouch()
   const [activeNav, setActiveNav] = useState('hello')
   const [showPhoto, setShowPhoto] = useState(false)
   // leftPanelRef doubles as the mobile sticky header for height measurement
@@ -122,7 +136,6 @@ export default function App() {
 
   return (
     <div className="portfolio">
-      {!IS_TOUCH && <GradientBlobCursor />}
 
       {/*
        * LEFT PANEL (desktop) / STICKY HEADER (mobile)
@@ -131,14 +144,15 @@ export default function App() {
       <div ref={leftPanelRef} className="left-panel">
         <div className="panel-top">
           <BrowserGuy />
-          <span className="panel-name">amanda piñero</span>
+          <h1 className="panel-name">amanda piñero</h1>
         </div>
-        <nav className="panel-nav">
+        <nav className="panel-nav" aria-label="Site sections">
           {NAV.map(item => (
             <button
               key={item}
               className={`nav-link${activeNav === item ? ' active' : ''}`}
               onClick={() => scrollTo(item)}
+              aria-current={activeNav === item ? 'true' : undefined}
             >
               {item}
             </button>
@@ -155,10 +169,10 @@ export default function App() {
         </div>
 
         {/* ── Hello ── */}
-        <section ref={helloRef} className="section">
+        <section ref={helloRef} className="section" aria-labelledby="section-hello">
           <div className="section-grid">
             <div className="section-meta">
-              <span className="section-label">✦ hello</span>
+              <h2 className="section-label" id="section-hello">✦ hello</h2>
             </div>
             <div className="hello-content">
               <div className="hello-bio">
@@ -187,7 +201,7 @@ export default function App() {
                 <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Mercury
                   <span className="company-preview-clip">
-                    <img src="https://api.microlink.io/?url=https%3A%2F%2Fmercury.com&screenshot=true&meta=false&embed=screenshot.url" alt="Mercury homepage" className="company-preview" />
+                    <img src={previewMercury} alt="Mercury homepage" className="company-preview" loading="lazy" />
                   </span>
                 </a>.
               </p>
@@ -196,20 +210,20 @@ export default function App() {
                 <a href="https://rev.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Rev
                   <span className="company-preview-clip">
-                    <img src="https://api.microlink.io/?url=https%3A%2F%2Frev.com&screenshot=true&meta=false&embed=screenshot.url" alt="Rev homepage" className="company-preview" />
+                    <img src={previewRev} alt="Rev homepage" className="company-preview" loading="lazy" />
                   </span>
                 </a>,{' '}
                 <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Michaels
                   <span className="company-preview-clip">
-                    <img src={michaelsScreenshot} alt="Michaels homepage" className="company-preview" />
+                    <img src={michaelsScreenshot} alt="Michaels homepage" className="company-preview" loading="lazy" />
                   </span>
                 </a>,{' '}
                 and{' '}
                 <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">
                   Whole Foods Market
                   <span className="company-preview-clip">
-                    <img src="https://api.microlink.io/?url=https%3A%2F%2Fwww.wholefoodsmarket.com&screenshot=true&meta=false&embed=screenshot.url" alt="Whole Foods Market homepage" className="company-preview" />
+                    <img src={previewWholefoods} alt="Whole Foods Market homepage" className="company-preview" loading="lazy" />
                   </span>
                 </a>.
               </p>
@@ -225,12 +239,12 @@ export default function App() {
         </section>
 
         {/* ── Work ── */}
-        <div ref={workRef} className="work-section">
+        <section ref={workRef} className="work-section" aria-labelledby="section-work">
           <div className="work-grid">
 
             {/* Single ✦ work label — left column, top-aligned with first company header */}
             <div className="work-section-label">
-              <span className="section-label">✦ work</span>
+              <h2 className="section-label" id="section-work">✦ work</h2>
             </div>
 
             <div className="work-companies">
@@ -276,15 +290,15 @@ export default function App() {
 
             </div>
           </div>
-        </div>
+        </section>
 
         {/* ── Fun ── (hidden) */}
 
         {/* ── Me ── */}
-        <section ref={meRef} className="me-section last-section">
+        <section ref={meRef} className="me-section last-section" aria-labelledby="section-me">
           {/* Left: label */}
           <div>
-            <span className="section-label">✦ me</span>
+            <h2 className="section-label" id="section-me">✦ me</h2>
           </div>
 
           {/* Center: contact card */}
