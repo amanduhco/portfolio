@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { trackProjectClick, trackLightboxClose } from './analytics'
 
 // ── Per-card component: hover GIF + lightbox ──────────────────────────────
-function FeatureCard({ item, index, total, itemRef }) {
+function FeatureCard({ item, index, total, itemRef, companyId }) {
   const [hovered, setHovered] = useState(false)
   const [gifSrc, setGifSrc] = useState(null)
   const [lightbox, setLightbox] = useState(false)
@@ -42,7 +43,7 @@ function FeatureCard({ item, index, total, itemRef }) {
         aria-label={`${index + 1} of ${total}: ${item.title}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setHovered(false)}
-        onClick={openLightbox}
+        onClick={() => { trackProjectClick(companyId, item.title); openLightbox() }}
         style={{ cursor: 'zoom-in' }}
       >
         <div className="fs-card-img">
@@ -63,12 +64,12 @@ function FeatureCard({ item, index, total, itemRef }) {
           role="dialog"
           aria-modal="true"
           aria-label={item.alt}
-          onClick={closeLightbox}
+          onClick={() => { trackLightboxClose(companyId, item.title); closeLightbox() }}
         >
           <button
             ref={closeBtnRef}
             className="lightbox-close"
-            onClick={closeLightbox}
+            onClick={() => { trackLightboxClose(companyId, item.title); closeLightbox() }}
             aria-label="Close lightbox"
           >✕</button>
           <img
@@ -210,6 +211,7 @@ export default function FeatureShowcase({ items, id }) {
               index={i}
               total={items.length}
               itemRef={el => { itemRefs.current[i] = el }}
+              companyId={id}
             />
           ))}
         </ul>

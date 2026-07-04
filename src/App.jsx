@@ -19,6 +19,7 @@ import previewRev from './assets/preview-rev.jpg'
 import previewWholefoods from './assets/preview-wholefoods.jpg'
 import amandaCoffee from './assets/amanda-coffee.svg'
 import FeatureShowcase from './FeatureShowcase'
+import { trackNavClick, trackOutboundLink, trackCta, trackEvent } from './analytics'
 
 const MERCURY_ITEMS = [
   {
@@ -82,6 +83,7 @@ export default function App() {
   const meRef    = useRef(null)
 
   const sectionRefs = { hello: helloRef, work: workRef, fun: funRef, me: meRef }
+  const lastTrackedSection = useRef('hello')
 
   useEffect(() => {
     const sections = [
@@ -105,6 +107,10 @@ export default function App() {
         }
       }
       setActiveNav(active)
+      if (active !== lastTrackedSection.current) {
+        lastTrackedSection.current = active
+        trackEvent('section_view', { section: active })
+      }
     }
 
     const panel = rightPanelRef.current
@@ -117,6 +123,7 @@ export default function App() {
   }, [])
 
   function scrollTo(section) {
+    trackNavClick(section)
     setActiveNav(section)
     const ref = sectionRefs[section]
     if (!ref?.current) return
@@ -198,7 +205,7 @@ export default function App() {
               </p>
               <p className="bio-text bio-currently">
                 Currently @{' '}
-                <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                <a href="https://mercury.com" target="_blank" rel="noopener noreferrer" className="company-link" onClick={() => trackOutboundLink('Mercury', 'https://mercury.com')}>
                   Mercury
                   <span className="company-preview-clip">
                     <img src={previewMercury} alt="Mercury homepage" className="company-preview" loading="lazy" />
@@ -207,20 +214,20 @@ export default function App() {
               </p>
               <p className="bio-text bio-prev">
                 Previously at{' '}
-                <a href="https://rev.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                <a href="https://rev.com" target="_blank" rel="noopener noreferrer" className="company-link" onClick={() => trackOutboundLink('Rev', 'https://rev.com')}>
                   Rev
                   <span className="company-preview-clip">
                     <img src={previewRev} alt="Rev homepage" className="company-preview" loading="lazy" />
                   </span>
                 </a>,{' '}
-                <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                <a href="https://michaels.com" target="_blank" rel="noopener noreferrer" className="company-link" onClick={() => trackOutboundLink('Michaels', 'https://michaels.com')}>
                   Michaels
                   <span className="company-preview-clip">
                     <img src={michaelsScreenshot} alt="Michaels homepage" className="company-preview" loading="lazy" />
                   </span>
                 </a>,{' '}
                 and{' '}
-                <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link">
+                <a href="https://www.wholefoodsmarket.com" target="_blank" rel="noopener noreferrer" className="company-link" onClick={() => trackOutboundLink('Whole Foods Market', 'https://www.wholefoodsmarket.com')}>
                   Whole Foods Market
                   <span className="company-preview-clip">
                     <img src={previewWholefoods} alt="Whole Foods Market homepage" className="company-preview" loading="lazy" />
@@ -228,7 +235,7 @@ export default function App() {
                 </a>.
               </p>
               </div>
-              <button className="cta-btn" onClick={() => scrollTo('me')}>
+              <button className="cta-btn" onClick={() => { trackCta('Get in touch'); scrollTo('me') }}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M7 2v10M7 12L2.5 7.5M7 12l4.5-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>

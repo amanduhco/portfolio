@@ -1,5 +1,6 @@
 import BrowserGuy from './BrowserGuy'
 import ContactAmanda1 from './ContactAmanda1'
+import { trackEvent } from './analytics'
 
 export default function LockScreen({ onEnter }) {
   return (
@@ -43,7 +44,7 @@ export default function LockScreen({ onEnter }) {
 
       {/* Enter anyway */}
       <button
-        onClick={onEnter}
+        onClick={() => { trackEvent('lockscreen_bypass'); onEnter() }}
         style={{
           background: 'none',
           border: 'none',

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { trackContactAction } from './analytics';
 
 const T = null;
 const G = {
@@ -356,6 +357,7 @@ export default function ContactAmanda() {
 
   const handleSend = () => {
     if (phase !== 'idle') return;
+    trackContactAction('reveal_start', 'lockscreen');
     setElapsed(0);
     setSceneIdx(0);
     setPhase('loading');
@@ -383,6 +385,7 @@ export default function ContactAmanda() {
   };
 
   const handleReset = () => {
+    trackContactAction('reset', 'lockscreen');
     clearTimeout(timerRef.current);
     clearInterval(elapsedRef.current);
     setContentVis(false);
@@ -512,6 +515,7 @@ export default function ContactAmanda() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="ca-icon-row"
+                  onClick={() => trackContactAction('contact_link', c.id)}
                   style={{
                     opacity: iconVisible[i] ? 1 : 0,
                     transform: iconVisible[i] ? 'translateY(0)' : 'translateY(6px)',
